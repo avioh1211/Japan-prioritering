@@ -277,7 +277,7 @@
     <div class="page-header fade">
       <div class="badge" id="name-badge">Workshop · Prioritering</div>
       <h1>Prioriter vores ønsker</h1>
-      <p>Bedøm hvert ønske fra 1–5 stjerner. De 5 ønsker med flest point går videre til udvikling.</p>
+      <p>Bedøm hvert ønske fra 1–5 stjerner.</p>
     </div>
 
     <div id="no-wishes-state" class="empty-state fade fade-d1" style="display:none;">
@@ -503,6 +503,14 @@ let lastVoteId   = null;
 const $  = id => document.getElementById(id);
 const SL = ["","Lav","Under middel","Middel","Høj","Kritisk"];
 
+function linkify(text) {
+  if (!text) return "";
+  const escaped = text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return escaped.replace(/(https?:\/\/[^\s<>"']+)/g,
+    url => `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline;word-break:break-all;">${url}</a>`
+  );
+}
+
 function showScreen(name) {
   ["name","vote","thanks","admin"].forEach(s =>
     $("screen-"+s).style.display = s===name ? "flex" : "none"
@@ -632,10 +640,10 @@ function buildWishCards() {
 
     const body=document.createElement("div"); body.style.flex="1";
     const t=document.createElement("div"); t.className="wish-title"; t.textContent=w.title;
-    const d=document.createElement("div"); d.className="wish-desc";  d.textContent=w.desc||w.description||"";
+    const d=document.createElement("div"); d.className="wish-desc";  d.innerHTML=linkify(w.desc||w.description||"");
     body.appendChild(t); body.appendChild(d);
     if (w.detail) {
-      const dt=document.createElement("div"); dt.className="wish-detail"; dt.textContent=w.detail;
+      const dt=document.createElement("div"); dt.className="wish-detail"; dt.innerHTML=linkify(w.detail);
       body.appendChild(dt);
     }
     body.appendChild(renderStars(w.id));
