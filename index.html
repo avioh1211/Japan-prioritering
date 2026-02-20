@@ -327,7 +327,10 @@
     <div style="font-size:64px;">⭐</div>
     <h1 id="thanks-name">Tak!</h1>
     <p>Din bedømmelse er registreret. Resultaterne vises af workshoplederen.</p>
-    <button class="btn-ghost" id="btn-new-voter">← Ny deltager</button>
+    <button class="btn-ghost"  id="btn-new-voter">← Ny deltager</button>
+    <button class="btn-danger" id="btn-reset-mine" style="margin-top:10px;">
+      Slet mine svar og stem igen
+    </button>
   </div>
 </div>
 
@@ -434,7 +437,7 @@
         <div id="name-saved" class="alert alert-success" style="display:none;"><span>✓</span><div>Navn gemt!</div></div>
       </div>
 
-      <!-- UPDATED: full workshop reset -->
+      <!-- Full workshop reset (optional admin global reset) -->
       <div class="panel" style="margin-top:16px;">
         <div class="section-title">Nulstil workshop</div>
         <p style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6;">
@@ -495,6 +498,7 @@ let ratings      = {};
 let parsedCSV    = [];
 let unsubscribe  = null;
 let workshopName = "Workshop · Prioritering";
+let lastVoteId   = null; // id for the last created vote document
 
 /* ── Helpers ── */
 const $  = id => document.getElementById(id);
@@ -644,7 +648,12 @@ function buildWishCards() {
 async function submitVote() {
   const btn=$("btn-submit"); btn.disabled=true; btn.textContent="Gemmer…";
   try {
-    await addDoc(collection(db, VOTES_COL), { name:currentName, ratings, timestamp:Date.now() });
+    const docRef = await addDoc(collection(db, VOTES_COL), {
+      name: currentName,
+      ratings,
+      timestamp: Date.now()
+    });
+    lastVoteId = docRef.id; // remember this user's vote
     $("thanks-name").textContent = "Tak, "+currentName+"!";
     showScreen("thanks");
   } catch(e) {
@@ -706,7 +715,7 @@ function renderResults(allVotes) {
     title.textContent=item.wish.title; row.appendChild(title);
 
     const nums=document.createElement("div"); nums.className="result-nums";
-    [{val:item.sum,lbl:"point",color:isTop?"#275f96":"#9b9fab"},
+    [{val:item.sum,lbl:"point",color=isTop?"#275f96":"#9b9fab"},
      {val:item.avg,lbl:"snit", color:isTop?"#92b9dd":"#9b9fab"},
      {val:item.count,lbl:"stemmer",color:"#9b9fab"}].forEach(n=>{
       const d=document.createElement("div"); d.className="result-num";
@@ -869,7 +878,7 @@ $("btn-export-csv").addEventListener("click", () => {
   a.download="workshop-resultater.csv"; a.click();
 });
 
-/* ═══════════════════════ RESET WORKSHOP ═══════════════════════ */
+/* ═══════════════════════ RESET WORKSHOP (admin global) ═══════════════════════ */
 $("btn-reset-votes").addEventListener("click", ()=>{
   $("reset-confirm").style.display="block";
   $("reset-done").style.display="none";
@@ -910,6 +919,27 @@ $("btn-confirm-reset").addEventListener("click", async ()=>{
   btn.disabled=false; btn.textContent="Ja, nulstil nu";
 });
 
+/* ═══════════════════════ PER-USER RESET (only this user's answers) ═══════════════════════ */
+$("btn-reset-mine").addEventListener("click", async () => {
+  if (!lastVoteId) {
+    alert("Kan ikke finde dine svar i denne session.");
+    return;
+  }
+
+  if (!confirm("Er du sikker på, at du vil slette dine svar og stemme igen?")) return;
+
+  try {
+    await deleteDoc(doc(db, VOTES_COL, lastVoteId));
+    ratings = {};
+    buildWishCards();
+    updateRatedCount();
+    showScreen("vote");
+    window.scrollTo(0, 0);
+  } catch (e) {
+    alert("Fejl ved sletning af dine svar: " + e.message);
+  }
+});
+
 /* ═══════════════════════ SAVE NAME ═══════════════════════ */
 $("btn-save-name").addEventListener("click", async ()=>{
   const name=$("inp-workshop-name").value.trim(); if(!name) return;
@@ -927,7 +957,7 @@ $("btn-start").addEventListener("click", async ()=>{
   const name=$("inp-name").value.trim(); if(!name) return;
   const snap=await getDocs(collection(db,VOTES_COL));
   if(snap.docs.map(d=>d.data().name?.toLowerCase()).includes(name.toLowerCase())){
-    alert(`${name} har allerede stemt. Vælg et andet navn.`); return;
+    alert(`${name} har allerede stemt. Vælg et andet navn, eller bed admin om at nulstille dine svar.`); return;
   }
   currentName=name; ratings={};
   $("vote-badge").textContent=name+" · Bedømmelse";
