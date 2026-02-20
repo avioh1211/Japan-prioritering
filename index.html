@@ -437,7 +437,6 @@
         <div id="name-saved" class="alert alert-success" style="display:none;"><span>✓</span><div>Navn gemt!</div></div>
       </div>
 
-      <!-- Full workshop reset (optional admin global reset) -->
       <div class="panel" style="margin-top:16px;">
         <div class="section-title">Nulstil workshop</div>
         <p style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6;">
@@ -498,7 +497,7 @@ let ratings      = {};
 let parsedCSV    = [];
 let unsubscribe  = null;
 let workshopName = "Workshop · Prioritering";
-let lastVoteId   = null; // id for the last created vote document
+let lastVoteId   = null;
 
 /* ── Helpers ── */
 const $  = id => document.getElementById(id);
@@ -653,7 +652,7 @@ async function submitVote() {
       ratings,
       timestamp: Date.now()
     });
-    lastVoteId = docRef.id; // remember this user's vote
+    lastVoteId = docRef.id;
     $("thanks-name").textContent = "Tak, "+currentName+"!";
     showScreen("thanks");
   } catch(e) {
@@ -715,9 +714,11 @@ function renderResults(allVotes) {
     title.textContent=item.wish.title; row.appendChild(title);
 
     const nums=document.createElement("div"); nums.className="result-nums";
-    [{val:item.sum,lbl:"point",color=isTop?"#275f96":"#9b9fab"},
-     {val:item.avg,lbl:"snit", color:isTop?"#92b9dd":"#9b9fab"},
-     {val:item.count,lbl:"stemmer",color:"#9b9fab"}].forEach(n=>{
+
+    // ✅ FIXED: was color= (invalid destructuring syntax), now correctly color:
+    [{val:item.sum,   lbl:"point",   color:isTop?"#275f96":"#9b9fab"},
+     {val:item.avg,   lbl:"snit",    color:isTop?"#92b9dd":"#9b9fab"},
+     {val:item.count, lbl:"stemmer", color:"#9b9fab"}].forEach(n=>{
       const d=document.createElement("div"); d.className="result-num";
       d.innerHTML=`<div class="result-num-val" style="color:${n.color}">${n.val}</div><div class="result-num-lbl">${n.lbl}</div>`;
       nums.appendChild(d);
@@ -878,7 +879,7 @@ $("btn-export-csv").addEventListener("click", () => {
   a.download="workshop-resultater.csv"; a.click();
 });
 
-/* ═══════════════════════ RESET WORKSHOP (admin global) ═══════════════════════ */
+/* ═══════════════════════ RESET WORKSHOP ═══════════════════════ */
 $("btn-reset-votes").addEventListener("click", ()=>{
   $("reset-confirm").style.display="block";
   $("reset-done").style.display="none";
@@ -890,44 +891,25 @@ $("btn-confirm-reset").addEventListener("click", async ()=>{
   const btn=$("btn-confirm-reset");
   btn.disabled=true; btn.textContent="Nulstiller…";
   try {
-    // 1) Slet alle stemmer
     const snap=await getDocs(collection(db,VOTES_COL));
     await Promise.all(snap.docs.map(d=>deleteDoc(d.ref)));
-
-    // 2) Ryd ønsker i config/workshop
-    await setDoc(
-      doc(db, CONFIG_DOC),
-      { wishes: [], updatedAt: Date.now() },
-      { merge: true }
-    );
-
-    // 3) Opdater lokal state og UI
+    await setDoc(doc(db, CONFIG_DOC), { wishes: [], updatedAt: Date.now() }, { merge: true });
     wishes = [];
     renderNameScreen();
     renderCurrentWishes();
     $("r-wishes").textContent = "0";
-
-    // 4) Nulstil resultater
     if(unsubscribe){unsubscribe();unsubscribe=null;}
     loadResults();
-
     $("reset-confirm").style.display="none";
     $("reset-done").style.display="block";
-  } catch(e){
-    alert("Fejl: "+e.message);
-  }
+  } catch(e){ alert("Fejl: "+e.message); }
   btn.disabled=false; btn.textContent="Ja, nulstil nu";
 });
 
-/* ═══════════════════════ PER-USER RESET (only this user's answers) ═══════════════════════ */
+/* ═══════════════════════ PER-USER RESET ═══════════════════════ */
 $("btn-reset-mine").addEventListener("click", async () => {
-  if (!lastVoteId) {
-    alert("Kan ikke finde dine svar i denne session.");
-    return;
-  }
-
+  if (!lastVoteId) { alert("Kan ikke finde dine svar i denne session."); return; }
   if (!confirm("Er du sikker på, at du vil slette dine svar og stemme igen?")) return;
-
   try {
     await deleteDoc(doc(db, VOTES_COL, lastVoteId));
     ratings = {};
@@ -935,9 +917,7 @@ $("btn-reset-mine").addEventListener("click", async () => {
     updateRatedCount();
     showScreen("vote");
     window.scrollTo(0, 0);
-  } catch (e) {
-    alert("Fejl ved sletning af dine svar: " + e.message);
-  }
+  } catch (e) { alert("Fejl ved sletning af dine svar: " + e.message); }
 });
 
 /* ═══════════════════════ SAVE NAME ═══════════════════════ */
