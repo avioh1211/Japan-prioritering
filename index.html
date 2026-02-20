@@ -11,21 +11,24 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --gold: #E8A838;
-      --gold-light: #F5D78A;
-      --gold-dim: rgba(232,168,56,0.15);
-      --bg: #0D0C1A;
-      --surface: rgba(255,255,255,0.04);
-      --border: rgba(255,255,255,0.08);
-      --text: #F0EEF8;
-      --muted: #8A88A8;
-      --dim: #4A4868;
+      --accent: #275f96;
+      --accent-light: #92b9dd;
+      --accent-dim: rgba(39,95,150,0.12);
+      --pink: #ffdbe2;
+      --pink-mid: #ff8181;
+      --bg: #f0f5fb;
+      --surface: #ffffff;
+      --border: rgba(39,95,150,0.14);
+      --text: #1a2e44;
+      --muted: #9b9fab;
+      --dim: #b8bdc6;
     }
 
     body {
-      background: radial-gradient(ellipse at 20% 20%, rgba(232,168,56,0.06) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 80%, rgba(100,80,180,0.06) 0%, transparent 60%),
-                  var(--bg);
+      background:
+        radial-gradient(ellipse at 15% 10%, rgba(255,219,226,0.55) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 85%, rgba(146,185,221,0.35) 0%, transparent 55%),
+        var(--bg);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
@@ -33,7 +36,7 @@
 
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(232,168,56,0.2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: rgba(39,95,150,0.2); border-radius: 3px; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
@@ -59,14 +62,14 @@
     .badge {
       display: inline-block;
       padding: 6px 16px;
-      background: rgba(232,168,56,0.12);
-      border: 1px solid rgba(232,168,56,0.3);
+      background: rgba(39,95,150,0.1);
+      border: 1px solid rgba(39,95,150,0.25);
       border-radius: 100px;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--accent);
       font-family: 'DM Mono', monospace;
       margin-bottom: 18px;
     }
@@ -89,6 +92,7 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 36px 40px;
+      box-shadow: 0 4px 24px rgba(39,95,150,0.08);
     }
 
     /* ── Form elements ── */
@@ -98,14 +102,14 @@
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--dim);
+      color: var(--muted);
       font-family: 'DM Mono', monospace;
       margin-bottom: 8px;
     }
     input[type=text], input[type=password] {
       width: 100%;
       padding: 13px 16px;
-      background: rgba(255,255,255,0.05);
+      background: #f5f8fc;
       border: 1px solid var(--border);
       border-radius: 12px;
       color: var(--text);
@@ -116,28 +120,28 @@
     }
     input::placeholder { color: var(--dim); }
     input:focus {
-      border-color: rgba(232,168,56,0.55);
-      background: rgba(232,168,56,0.04);
+      border-color: rgba(39,95,150,0.5);
+      background: #fff;
     }
 
     /* ── Buttons ── */
     .btn-primary {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, #E8A838, #C4832A);
+      background: linear-gradient(135deg, #275f96, #1a4a78);
       border: none;
       border-radius: 12px;
-      color: #1A1408;
+      color: #ffffff;
       font-size: 15px;
       font-weight: 700;
       font-family: 'Syne', sans-serif;
       cursor: pointer;
       transition: all 0.2s;
       letter-spacing: 0.02em;
-      box-shadow: 0 6px 24px rgba(232,168,56,0.25);
+      box-shadow: 0 6px 20px rgba(39,95,150,0.28);
     }
     .btn-primary:disabled {
-      background: var(--surface);
+      background: #e8edf3;
       color: var(--dim);
       box-shadow: none;
       cursor: default;
@@ -153,24 +157,24 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
+    .btn-ghost:hover { border-color: rgba(39,95,150,0.3); color: var(--accent); }
     .btn-gold {
       padding: 11px 20px;
-      background: rgba(232,168,56,0.1);
-      border: 1px solid rgba(232,168,56,0.25);
+      background: rgba(39,95,150,0.08);
+      border: 1px solid rgba(39,95,150,0.2);
       border-radius: 10px;
-      color: var(--gold);
+      color: var(--accent);
       font-size: 13px;
       font-family: 'DM Mono', monospace;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-gold:hover { background: rgba(232,168,56,0.18); }
+    .btn-gold:hover { background: rgba(39,95,150,0.15); }
 
     /* ── Progress bar ── */
     .progress-wrap {
       height: 4px;
-      background: rgba(255,255,255,0.06);
+      background: rgba(39,95,150,0.1);
       border-radius: 2px;
       overflow: hidden;
       max-width: 280px;
@@ -178,7 +182,7 @@
     }
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      background: linear-gradient(90deg, #275f96, #92b9dd);
       border-radius: 2px;
       transition: width 0.4s ease;
     }
@@ -194,27 +198,28 @@
       align-items: flex-start;
       position: relative;
       overflow: hidden;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
       margin-bottom: 10px;
+      box-shadow: 0 2px 10px rgba(39,95,150,0.05);
     }
-    .wish-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .wish-card:hover { border-color: rgba(39,95,150,0.3); box-shadow: 0 4px 18px rgba(39,95,150,0.1); }
     .wish-card .accent-bar {
       position: absolute;
       top: 0; left: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      background: linear-gradient(90deg, #275f96, #92b9dd);
       border-radius: 3px 0 0 0;
       transition: width 0.4s ease;
     }
     .wish-num {
       min-width: 34px; height: 34px;
       border-radius: 10px;
-      background: rgba(232,168,56,0.1);
-      border: 1px solid rgba(232,168,56,0.25);
+      background: rgba(39,95,150,0.1);
+      border: 1px solid rgba(39,95,150,0.2);
       display: flex; align-items: center; justify-content: center;
       font-family: 'DM Mono', monospace;
       font-size: 13px; font-weight: 700;
-      color: var(--gold);
+      color: var(--accent);
       flex-shrink: 0;
     }
     .wish-title {
@@ -249,7 +254,7 @@
       display: flex; gap: 10px;
     }
     .submit-bar .btn-primary {
-      box-shadow: 0 8px 32px rgba(232,168,56,0.35);
+      box-shadow: 0 8px 28px rgba(39,95,150,0.35);
     }
 
     /* ── Divider ── */
@@ -269,9 +274,10 @@
       border-radius: 16px;
       padding: 16px 32px;
       margin-bottom: 36px;
+      box-shadow: 0 4px 16px rgba(39,95,150,0.08);
     }
     .stat { text-align: center; }
-    .stat-num { font-size: 28px; font-weight: 800; color: var(--gold); font-family: 'Syne', sans-serif; }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Syne', sans-serif; }
     .stat-lbl { font-size: 11px; color: var(--dim); font-family: 'DM Sans', sans-serif; margin-top: 2px; }
     .stat-sep { width: 1px; background: var(--border); }
 
@@ -284,8 +290,8 @@
       margin-bottom: 8px;
       transition: background 0.2s;
     }
-    .result-row.top { background: rgba(232,168,56,0.06); border: 1px solid rgba(232,168,56,0.22); }
-    .result-row.rest { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+    .result-row.top { background: #ffdbe2; border: 1px solid rgba(255,129,129,0.3); }
+    .result-row.rest { background: var(--surface); border: 1px solid var(--border); }
     .result-bar {
       position: absolute; bottom: 0; left: 0;
       height: 3px;
@@ -319,7 +325,7 @@
     .spinner {
       width: 36px; height: 36px;
       border: 3px solid var(--border);
-      border-top-color: var(--gold);
+      border-top-color: var(--accent);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
@@ -329,8 +335,8 @@
     .voters-box {
       margin-top: 28px;
       padding: 18px 20px;
-      background: rgba(232,168,56,0.04);
-      border: 1px solid rgba(232,168,56,0.15);
+      background: rgba(146,185,221,0.15);
+      border: 1px solid rgba(39,95,150,0.2);
       border-radius: 12px;
       font-size: 13px; color: var(--muted);
       font-family: 'DM Sans', sans-serif;
@@ -557,8 +563,8 @@ function renderStars(wishId) {
 function starSVG(filled) {
   return `<svg width="30" height="30" viewBox="0 0 24 24" fill="none">
     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-      fill="${filled?"#E8A838":"none"}"
-      stroke="${filled?"#E8A838":"#4A4A6A"}"
+      fill="${filled?"#275f96":"none"}"
+      stroke="${filled?"#275f96":"#c5cdd8"}"
       stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
 }
@@ -577,7 +583,7 @@ function setRating(wishId, value) {
   const lbl = $("star-lbl-"+wishId);
   if (lbl) {
     lbl.textContent = starLabels[value];
-    lbl.style.color = "#E8A838";
+    lbl.style.color = "#275f96";
   }
   // accent bar
   const card = document.querySelector(`.wish-card[data-wish="${wishId}"] .accent-bar`);
@@ -692,7 +698,7 @@ function renderResults(allVotes) {
 
   // Section label
   const lbl = document.createElement("div");
-  lbl.style.cssText="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;";
+  lbl.style.cssText="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;";
   lbl.textContent = "Rangering — Top 5 går videre til udvikling";
   list.appendChild(lbl);
 
@@ -706,13 +712,13 @@ function renderResults(allVotes) {
     // bottom progress bar
     const bar = document.createElement("div");
     bar.className = "result-bar";
-    bar.style.cssText = `width:${pct}%; background:${isTop?"linear-gradient(90deg,#E8A838,#F5D78A)":"rgba(255,255,255,0.07)"};`;
+    bar.style.cssText = `width:${pct}%; background:${isTop?"linear-gradient(90deg,#275f96,#92b9dd)":"rgba(39,95,150,0.08)"};`;
     row.appendChild(bar);
 
     // rank badge
     const rank = document.createElement("div");
     rank.className = "result-rank";
-    rank.style.cssText = `background:${isTop?"rgba(232,168,56,0.2)":"rgba(255,255,255,0.05)"}; color:${isTop?"#E8A838":"#6A688A"};`;
+    rank.style.cssText = `background:${isTop?"rgba(255,219,226,0.8)":"rgba(39,95,150,0.07)"}; color:${isTop?"#275f96":"#9b9fab"};`;
     rank.textContent = idx+1;
     row.appendChild(rank);
 
@@ -725,16 +731,16 @@ function renderResults(allVotes) {
 
     const title = document.createElement("div");
     title.className = "result-title";
-    title.style.color = isTop ? "var(--text)" : "var(--muted)";
+    title.style.color = isTop ? "#1a2e44" : "var(--muted)";
     title.textContent = item.wish.title;
     row.appendChild(title);
 
     const nums = document.createElement("div");
     nums.className = "result-nums";
     [
-      { val: item.sum,   lbl: "point",   color: isTop?"#E8A838":"#6A688A" },
-      { val: item.avg,   lbl: "snit",    color: isTop?"#F5D78A":"#6A688A" },
-      { val: item.count, lbl: "stemmer", color: "#6A688A" },
+      { val: item.sum,   lbl: "point",   color: isTop?"#275f96":"#9b9fab" },
+      { val: item.avg,   lbl: "snit",    color: isTop?"#92b9dd":"#9b9fab" },
+      { val: item.count, lbl: "stemmer", color: "#9b9fab" },
     ].forEach(n => {
       const d = document.createElement("div");
       d.className = "result-num";
@@ -750,7 +756,7 @@ function renderResults(allVotes) {
   // Voters list
   const box = $("voters-box");
   const names = allVotes.map(v=>v.name).join(", ");
-  box.innerHTML = `<strong style="color:var(--gold)">Deltagere:</strong> ${names}`;
+  box.innerHTML = `<strong style="color:var(--accent)">Deltagere:</strong> ${names}`;
   box.style.display = "block";
 }
 
