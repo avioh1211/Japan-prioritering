@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HubSpot Helpdesk · Prioritering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #E8A838;
+      --gold-light: #F5D78A;
+      --gold-dim: rgba(232,168,56,0.15);
+      --bg: #0D0C1A;
+      --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --text: #F0EEF8;
+      --muted: #8A88A8;
+      --dim: #4A4868;
+    }
+
+    body {
+      background: radial-gradient(ellipse at 20% 20%, rgba(232,168,56,0.06) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 80%, rgba(100,80,180,0.06) 0%, transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(232,168,56,0.2); border-radius: 3px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade { animation: fadeUp 0.5s ease both; }
+    .fade-d1 { animation-delay: 0.08s; }
+    .fade-d2 { animation-delay: 0.16s; }
+    .fade-d3 { animation-delay: 0.24s; }
+
+    /* ── Layout ── */
+    .page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 80px;
+      min-height: 100vh;
+    }
+    .card-wrap { width: 100%; max-width: 680px; }
+    .card-wrap-wide { width: 100%; max-width: 800px; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(232,168,56,0.12);
+      border: 1px solid rgba(232,168,56,0.3);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 18px;
+    }
+
+    /* ── Header ── */
+    .page-header { text-align: center; margin-bottom: 44px; }
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .page-header p { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 420px; margin: 0 auto; }
+
+    /* ── Panel ── */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 40px;
+    }
+
+    /* ── Form elements ── */
+    label.field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 8px;
+    }
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+    input::placeholder { color: var(--dim); }
+    input:focus {
+      border-color: rgba(232,168,56,0.55);
+      background: rgba(232,168,56,0.04);
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #E8A838, #C4832A);
+      border: none;
+      border-radius: 12px;
+      color: #1A1408;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Syne', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.02em;
+      box-shadow: 0 6px 24px rgba(232,168,56,0.25);
+    }
+    .btn-primary:disabled {
+      background: var(--surface);
+      color: var(--dim);
+      box-shadow: none;
+      cursor: default;
+    }
+    .btn-ghost {
+      padding: 11px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
+    .btn-gold {
+      padding: 11px 20px;
+      background: rgba(232,168,56,0.1);
+      border: 1px solid rgba(232,168,56,0.25);
+      border-radius: 10px;
+      color: var(--gold);
+      font-size: 13px;
+      font-family: 'DM Mono', monospace;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-gold:hover { background: rgba(232,168,56,0.18); }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+      max-width: 280px;
+      margin: 12px auto 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Wish card ── */
+    .wish-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 26px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s, border-color 0.2s;
+      margin-bottom: 10px;
+    }
+    .wish-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+    .wish-card .accent-bar {
+      position: absolute;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 3px 0 0 0;
+      transition: width 0.4s ease;
+    }
+    .wish-num {
+      min-width: 34px; height: 34px;
+      border-radius: 10px;
+      background: rgba(232,168,56,0.1);
+      border: 1px solid rgba(232,168,56,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px; font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .wish-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14.5px; font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .wish-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 4px; }
+    .wish-detail { font-size: 11.5px; color: var(--dim); font-style: italic; margin-bottom: 14px; }
+
+    /* ── Stars ── */
+    .stars { display: flex; gap: 4px; align-items: center; }
+    .star-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 2px; transition: transform 0.15s;
+      line-height: 0;
+    }
+    .star-btn:hover { transform: scale(1.25); }
+    .star-btn:disabled { cursor: default; }
+    .star-label {
+      font-size: 12px; font-weight: 600;
+      font-family: 'DM Mono', monospace;
+      margin-left: 6px;
+      min-width: 76px;
+    }
+
+    /* ── Submit bar ── */
+    .submit-bar {
+      position: sticky; bottom: 20px;
+      margin-top: 28px;
+      display: flex; gap: 10px;
+    }
+    .submit-bar .btn-primary {
+      box-shadow: 0 8px 32px rgba(232,168,56,0.35);
+    }
+
+    /* ── Divider ── */
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+    .divider-line { height: 1px; flex: 1; background: var(--border); }
+    .divider-text { font-size: 11px; color: var(--dim); font-family: 'DM Mono', monospace; }
+
+    /* ── Admin row ── */
+    .admin-row { display: flex; gap: 8px; }
+    .admin-row input { font-size: 13px; font-family: 'DM Mono', monospace; padding: 10px 14px; }
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      display: inline-flex; gap: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 32px;
+      margin-bottom: 36px;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--gold); font-family: 'Syne', sans-serif; }
+    .stat-lbl { font-size: 11px; color: var(--dim); font-family: 'DM Sans', sans-serif; margin-top: 2px; }
+    .stat-sep { width: 1px; background: var(--border); }
+
+    /* ── Result row ── */
+    .result-row {
+      border-radius: 12px;
+      padding: 13px 18px;
+      display: flex; align-items: center; gap: 14px;
+      position: relative; overflow: hidden;
+      margin-bottom: 8px;
+      transition: background 0.2s;
+    }
+    .result-row.top { background: rgba(232,168,56,0.06); border: 1px solid rgba(232,168,56,0.22); }
+    .result-row.rest { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); }
+    .result-bar {
+      position: absolute; bottom: 0; left: 0;
+      height: 3px;
+      transition: width 0.6s ease;
+      border-radius: 0;
+    }
+    .result-rank {
+      min-width: 28px; height: 28px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .result-title {
+      flex: 1; min-width: 0;
+      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .result-nums { display: flex; gap: 16px; align-items: center; flex-shrink: 0; }
+    .result-num { text-align: center; }
+    .result-num-val { font-size: 17px; font-weight: 800; font-family: 'DM Mono', monospace; }
+    .result-num-lbl { font-size: 10px; color: var(--dim); }
+
+    /* ── Thank you ── */
+    .thanks-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 70vh; }
+    .thanks-wrap h1 { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; margin: 16px 0 10px; }
+    .thanks-wrap p { color: var(--muted); font-size: 15px; max-width: 340px; margin-bottom: 28px; }
+
+    /* ── Loader ── */
+    .loader { display: flex; justify-content: center; padding: 60px; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Voters list ── */
+    .voters-box {
+      margin-top: 28px;
+      padding: 18px 20px;
+      background: rgba(232,168,56,0.04);
+      border: 1px solid rgba(232,168,56,0.15);
+      border-radius: 12px;
+      font-size: 13px; color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 500px) {
+      .panel { padding: 24px 20px; }
+      .stats-bar { gap: 14px; padding: 14px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  SCREENS (shown/hidden via JS)                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+
+<!-- NAME SCREEN -->
+<div id="screen-name" class="page">
+  <div class="card-wrap">
+    <div class="page-header fade">
+      <div class="badge">HubSpot Helpdesk · Workshop</div>
+      <h1>Prioriter vores ønsker</h1>
+      <p>Bedøm hvert ønske fra 1–5 stjerner. De 5 ønsker med flest point går videre til udvikling.</p>
+    </div>
+    <div class="panel fade fade-d1">
+      <label class="field-label" for="inp-name">Dit navn</label>
+      <input type="text" id="inp-name" placeholder="Skriv dit fulde navn..." autocomplete="off" style="margin-bottom:20px;" />
+      <button class="btn-primary" id="btn-start" disabled>Start bedømmelse →</button>
+    </div>
+
+    <div class="divider fade fade-d2">
+      <div class="divider-line"></div>
+      <span class="divider-text">ADMIN</span>
+      <div class="divider-line"></div>
+    </div>
+    <div class="admin-row fade fade-d3">
+      <input type="password" id="inp-admin" placeholder="Adgangskode til resultater..." style="flex:1;" />
+      <button class="btn-ghost" id="btn-admin">Se resultater</button>
+    </div>
+    <p id="admin-err" style="font-size:12px;color:#c0554a;margin-top:8px;display:none;">Forkert adgangskode</p>
+  </div>
+</div>
+
+<!-- VOTE SCREEN -->
+<div id="screen-vote" class="page" style="display:none;">
+  <div class="card-wrap-wide">
+    <div class="page-header fade" id="vote-header">
+      <div class="badge" id="vote-badge">… · Bedømmelse</div>
+      <h1>Bedøm alle 13 ønsker</h1>
+      <p>Bedøm mindst 5 ønsker · <span id="rated-count">0</span>/13 bedømt</p>
+      <div class="progress-wrap">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div id="wishes-list"></div>
+    <div class="submit-bar">
+      <button class="btn-primary" id="btn-submit" disabled>Bedøm mindst 5 ønsker…</button>
+    </div>
+  </div>
+</div>
+
+<!-- THANKS SCREEN -->
+<div id="screen-thanks" class="page" style="display:none;">
+  <div class="thanks-wrap fade">
+    <div style="font-size:64px;">⭐</div>
+    <h1 id="thanks-name">Tak!</h1>
+    <p>Din bedømmelse er registreret i realtid. Resultaterne vil blive vist af workshoplederen.</p>
+    <button class="btn-ghost" id="btn-new-voter">← Ny deltager</button>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="screen-results" class="page" style="display:none;">
+  <div class="card-wrap-wide">
+    <div class="page-header fade">
+      <div class="badge">Live Resultater</div>
+      <h1>Prioriteringsresultater</h1>
+      <p>Sorteret efter samlet point-score · Top 5 markeret med 🏆</p>
+    </div>
+    <div style="text-align:center;">
+      <div class="stats-bar">
+        <div class="stat"><div class="stat-num" id="r-voters">0</div><div class="stat-lbl">Deltagere</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><div class="stat-num">5</div><div class="stat-lbl">Vindere</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><div class="stat-num">13</div><div class="stat-lbl">Ønsker</div></div>
+      </div>
+    </div>
+    <div id="results-loading" class="loader"><div class="spinner"></div></div>
+    <div id="results-list" style="display:none;"></div>
+    <div id="results-empty" style="display:none;text-align:center;padding:60px 0;color:var(--dim);">Ingen stemmer endnu. Vent på deltagerne.</div>
+    <div id="voters-box" class="voters-box" style="display:none;"></div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button class="btn-ghost" id="btn-back-results">← Tilbage</button>
+      <button class="btn-gold" id="btn-refresh">↻ Opdater live</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  FIREBASE + APP LOGIC                               -->
+<!-- ═══════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// ── Firebase config ──────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDZnCVzCmqpdHMbocyZizArRoKtAS1bR0U",
+  authDomain: "hubspot-prioritering.firebaseapp.com",
+  projectId: "hubspot-prioritering",
+  storageBucket: "hubspot-prioritering.firebasestorage.app",
+  messagingSenderId: "516168298784",
+  appId: "1:516168298784:web:6a41c68e2a4a5e2af16745",
+  measurementId: "G-6PG9ZFG65V"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+const VOTES_COL = "votes";
+const ADMIN_PASSWORD = "admin2024"; // ← change this!
+
+// ── Wishes data ──────────────────────────────────────
+const wishes = [
+  { id:1,  title:"Automatiske flows & sagslukning",
+    desc:"Vi skal løse problemer med de automatiske flows, særligt dem der håndterer sagslukning og tilhørende kundekommunikation.",
+    detail:"Dækker: Fejlende automatiske flows og inkonsekvente sagslukkeregler." },
+  { id:2,  title:"Team-specifikke visninger & ressourceplanlægning",
+    desc:"Vi skal sikre, at team-specifikke visninger som 'Mit teams åbne' afspejler de korrekte sagslukkeregler og teamprocesser, så de kan bruges effektivt til overblik og ressourceplanlægning.",
+    detail:"Dækker: Udfordringer med forskellige sagslukkeregler for Teknisk Support og Kundeservice." },
+  { id:3,  title:"Telefoni direkte i HubSpot",
+    desc:"Vi skal implementere telefoni direkte i HubSpot for at samle al kundedata og kommunikation ét sted.",
+    detail:"Dækker: Ønske om at integrere telefoni for at undgå brug af flere systemer som Aircall." },
+  { id:4,  title:"Korrekt afsendermail & professionalisme",
+    desc:"Vi skal sikre, at den korrekte afsendermail automatisk vælges baseret på pipeline eller modtager, når vi besvarer henvendelser, for at opretholde professionalisme og effektivitet.",
+    detail:"Dækker: Problem med ukorrekt forlagsmail, hvis man glemmer at tjekke." },
+  { id:5,  title:"Søge- & oprettelsesfunktioner for kontakter",
+    desc:"Vi skal forbedre søge- og oprettelsesfunktionerne for kontakter og virksomheder, inklusiv søgning på institutionsnummer, for at sikre korrekte data og forebygge dubletter.",
+    detail:"Dækker: Manglende søgning på institutionsnummer og duplikerede kontakter." },
+  { id:6,  title:"Uafhængige mailtråde i Helpdesk",
+    desc:"Vi skal forbedre mulighederne for at oprette nye, uafhængige mailtråde i Helpdesk, selv når der er eksisterende korrespondance.",
+    detail:"Dækker: Begrænsningen om mulighed for at starte en separat mailtråd." },
+  { id:7,  title:"Reducere unødige informationer & pop-ups",
+    desc:"Vi skal forbedre overblikket i sager og reducere mængden af unødige informationer, knapper og pop-up vinduer, så de seneste svar og relevante data er nemme at finde uden forvirring.",
+    detail:"Dækker: Uoverskuelighed i lange korrespondancer, for mange forstyrrende elementer." },
+  { id:8,  title:"Oprydning & dubletfletning af kontakter",
+    desc:"Vi skal gennemføre en omfattende oprydning og dubletfletning af eksisterende virksomheder og kontakter, især for Praxis, for at sikre datakvalitet.",
+    detail:"Dækker: Behov for en stor oprydning i duplikerede virksomheds- og kontaktdata." },
+  { id:9,  title:"Abonnements- & dealdata overblik",
+    desc:"Vi skal optimere overblikket over abonnements- og dealdata på virksomheds- og kontaktkort, så relevante informationer er let tilgængelige.",
+    detail:"Dækker: Manglende/svært tilgængeligt abonnements- og dealoverview." },
+  { id:10, title:"Filtrering & visning i aktivitetssektionen",
+    desc:"Vi skal forbedre filtrerings- og visningsmuligheder i aktivitetssektionen, inklusiv en specifik Helpdesk-fane, og fjerne unødvendige detaljer som Call ID og GMT+1.",
+    detail:"Dækker: Ønske om bedre filtrering af aktiviteter og fjernelse af forstyrrende elementer." },
+  { id:11, title:"Effektiv brug af filtre til sagsoverblik",
+    desc:"Vi skal sikre og videreudvikle vores effektive brug af filtre til at opretholde et klart overblik over nye og ventende sager.",
+    detail:"Dækker: Det som allerede virker godt med overblik og filtre." },
+  { id:12, title:"Intern kollaboration & sagsnotater",
+    desc:"Vi skal fortsat styrke den nemme interne kollaboration og deling af sagsnotater og kundehistorik for at sikre et effektivt informationsflow mellem afdelinger.",
+    detail:"Dækker: Det som allerede virker godt med samarbejde, notater og historik." },
+  { id:13, title:"Statusændring, tags & ticket-ejere",
+    desc:"Vi skal udnytte og optimere den smidige funktionalitet til at ændre status, tilføje tags og skifte ticket-ejere for en effektiv sagsbehandling.",
+    detail:"Dækker: Det som allerede virker godt med håndtering af status, tags og tildeling." }
+];
+
+// ── State ─────────────────────────────────────────────
+let currentName = "";
+let ratings = {}; // { wishId: 1-5 }
+let unsubscribe = null;
+
+// ── Helpers ───────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const starLabels = ["","Lav","Under middel","Middel","Høj","Kritisk"];
+
+function showScreen(name) {
+  ["name","vote","thanks","results"].forEach(s => {
+    $("screen-"+s).style.display = s===name ? "flex" : "none";
+  });
+}
+
+function updateRatedCount() {
+  const count = Object.values(ratings).filter(r=>r>0).length;
+  $("rated-count").textContent = count;
+  $("progress-fill").style.width = (count/13*100)+"%";
+  const btn = $("btn-submit");
+  if (count >= 5) {
+    btn.disabled = false;
+    btn.textContent = `Indsend ${count} bedømmelser ✓`;
+  } else {
+    btn.disabled = true;
+    btn.textContent = `Bedøm ${5-count} mere til indsendelse…`;
+  }
+}
+
+// ── Render star widget ────────────────────────────────
+function renderStars(wishId) {
+  const wrap = document.createElement("div");
+  wrap.className = "stars";
+  wrap.id = "stars-"+wishId;
+
+  for (let s=1; s<=5; s++) {
+    const btn = document.createElement("button");
+    btn.className = "star-btn";
+    btn.dataset.wish = wishId;
+    btn.dataset.star = s;
+    btn.innerHTML = starSVG(false);
+    btn.addEventListener("click", () => setRating(wishId, s));
+    btn.addEventListener("mouseenter", () => previewStars(wishId, s));
+    btn.addEventListener("mouseleave", () => previewStars(wishId, ratings[wishId]||0));
+    wrap.appendChild(btn);
+  }
+  const lbl = document.createElement("span");
+  lbl.className = "star-label";
+  lbl.id = "star-lbl-"+wishId;
+  lbl.style.color = "var(--dim)";
+  lbl.textContent = "Ikke vurderet";
+  wrap.appendChild(lbl);
+  return wrap;
+}
+
+function starSVG(filled) {
+  return `<svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+      fill="${filled?"#E8A838":"none"}"
+      stroke="${filled?"#E8A838":"#4A4A6A"}"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function previewStars(wishId, upTo) {
+  const wrap = $("stars-"+wishId);
+  if (!wrap) return;
+  wrap.querySelectorAll(".star-btn").forEach(btn => {
+    btn.innerHTML = starSVG(+btn.dataset.star <= upTo);
+  });
+}
+
+function setRating(wishId, value) {
+  ratings[wishId] = value;
+  previewStars(wishId, value);
+  const lbl = $("star-lbl-"+wishId);
+  if (lbl) {
+    lbl.textContent = starLabels[value];
+    lbl.style.color = "#E8A838";
+  }
+  // accent bar
+  const card = document.querySelector(`.wish-card[data-wish="${wishId}"] .accent-bar`);
+  if (card) card.style.width = (value/5*100)+"%";
+  updateRatedCount();
+}
+
+// ── Build vote screen ─────────────────────────────────
+function buildWishCards() {
+  const list = $("wishes-list");
+  list.innerHTML = "";
+  wishes.forEach((w, i) => {
+    const card = document.createElement("div");
+    card.className = "wish-card";
+    card.dataset.wish = w.id;
+
+    const bar = document.createElement("div");
+    bar.className = "accent-bar";
+    bar.style.width = "0%";
+    card.appendChild(bar);
+
+    const num = document.createElement("div");
+    num.className = "wish-num";
+    num.textContent = String(i+1).padStart(2,"0");
+    card.appendChild(num);
+
+    const body = document.createElement("div");
+    body.style.flex = "1";
+
+    const title = document.createElement("div");
+    title.className = "wish-title";
+    title.textContent = w.title;
+    body.appendChild(title);
+
+    const desc = document.createElement("div");
+    desc.className = "wish-desc";
+    desc.textContent = w.desc;
+    body.appendChild(desc);
+
+    const detail = document.createElement("div");
+    detail.className = "wish-detail";
+    detail.textContent = w.detail;
+    body.appendChild(detail);
+
+    body.appendChild(renderStars(w.id));
+    card.appendChild(body);
+    list.appendChild(card);
+  });
+}
+
+// ── Submit vote ───────────────────────────────────────
+async function submitVote() {
+  const btn = $("btn-submit");
+  btn.disabled = true;
+  btn.textContent = "Gemmer…";
+  try {
+    await addDoc(collection(db, VOTES_COL), {
+      name: currentName,
+      ratings: ratings,
+      timestamp: Date.now()
+    });
+    $("thanks-name").textContent = "Tak, "+currentName+"!";
+    showScreen("thanks");
+  } catch(e) {
+    alert("Fejl ved gemning: "+e.message);
+    btn.disabled = false;
+    updateRatedCount();
+  }
+}
+
+// ── Fetch & render results ────────────────────────────
+async function loadResults() {
+  $("results-loading").style.display = "flex";
+  $("results-list").style.display    = "none";
+  $("results-empty").style.display   = "none";
+  $("voters-box").style.display      = "none";
+
+  if (unsubscribe) { unsubscribe(); }
+
+  // Use onSnapshot for live updates
+  unsubscribe = onSnapshot(collection(db, VOTES_COL), (snap) => {
+    const allVotes = snap.docs.map(d => d.data());
+    renderResults(allVotes);
+  });
+}
+
+function renderResults(allVotes) {
+  $("results-loading").style.display = "none";
+  $("r-voters").textContent = allVotes.length;
+
+  if (allVotes.length === 0) {
+    $("results-empty").style.display = "block";
+    return;
+  }
+
+  // Compute totals
+  const totals = wishes.map(w => {
+    const ratingsList = allVotes.flatMap(v => {
+      const r = v.ratings && v.ratings[w.id];
+      return r ? [r] : [];
+    });
+    const sum = ratingsList.reduce((a,b)=>a+b, 0);
+    const avg = ratingsList.length ? (sum/ratingsList.length).toFixed(1) : "—";
+    return { wish:w, sum, avg, count:ratingsList.length };
+  });
+
+  totals.sort((a,b) => b.sum - a.sum || parseFloat(b.avg||0) - parseFloat(a.avg||0));
+  const maxSum = totals[0]?.sum || 1;
+
+  const list = $("results-list");
+  list.innerHTML = "";
+
+  // Section label
+  const lbl = document.createElement("div");
+  lbl.style.cssText="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;";
+  lbl.textContent = "Rangering — Top 5 går videre til udvikling";
+  list.appendChild(lbl);
+
+  totals.forEach((item, idx) => {
+    const isTop = idx < 5;
+    const pct = maxSum > 0 ? (item.sum/maxSum*100) : 0;
+
+    const row = document.createElement("div");
+    row.className = "result-row " + (isTop?"top":"rest");
+
+    // bottom progress bar
+    const bar = document.createElement("div");
+    bar.className = "result-bar";
+    bar.style.cssText = `width:${pct}%; background:${isTop?"linear-gradient(90deg,#E8A838,#F5D78A)":"rgba(255,255,255,0.07)"};`;
+    row.appendChild(bar);
+
+    // rank badge
+    const rank = document.createElement("div");
+    rank.className = "result-rank";
+    rank.style.cssText = `background:${isTop?"rgba(232,168,56,0.2)":"rgba(255,255,255,0.05)"}; color:${isTop?"#E8A838":"#6A688A"};`;
+    rank.textContent = idx+1;
+    row.appendChild(rank);
+
+    if (isTop) {
+      const trophy = document.createElement("span");
+      trophy.textContent = "🏆";
+      trophy.style.fontSize = "15px";
+      row.appendChild(trophy);
+    }
+
+    const title = document.createElement("div");
+    title.className = "result-title";
+    title.style.color = isTop ? "var(--text)" : "var(--muted)";
+    title.textContent = item.wish.title;
+    row.appendChild(title);
+
+    const nums = document.createElement("div");
+    nums.className = "result-nums";
+    [
+      { val: item.sum,   lbl: "point",   color: isTop?"#E8A838":"#6A688A" },
+      { val: item.avg,   lbl: "snit",    color: isTop?"#F5D78A":"#6A688A" },
+      { val: item.count, lbl: "stemmer", color: "#6A688A" },
+    ].forEach(n => {
+      const d = document.createElement("div");
+      d.className = "result-num";
+      d.innerHTML = `<div class="result-num-val" style="color:${n.color}">${n.val}</div><div class="result-num-lbl">${n.lbl}</div>`;
+      nums.appendChild(d);
+    });
+    row.appendChild(nums);
+    list.appendChild(row);
+  });
+
+  list.style.display = "block";
+
+  // Voters list
+  const box = $("voters-box");
+  const names = allVotes.map(v=>v.name).join(", ");
+  box.innerHTML = `<strong style="color:var(--gold)">Deltagere:</strong> ${names}`;
+  box.style.display = "block";
+}
+
+// ── Event listeners ───────────────────────────────────
+
+// Name input
+$("inp-name").addEventListener("input", e => {
+  $("btn-start").disabled = !e.target.value.trim();
+});
+$("inp-name").addEventListener("keydown", e => { if(e.key==="Enter") $("btn-start").click(); });
+
+// Start voting
+$("btn-start").addEventListener("click", async () => {
+  const name = $("inp-name").value.trim();
+  if (!name) return;
+
+  // Check duplicate
+  const snap = await getDocs(collection(db, VOTES_COL));
+  const existing = snap.docs.map(d=>d.data().name?.toLowerCase());
+  if (existing.includes(name.toLowerCase())) {
+    alert(`${name} har allerede stemt. Vælg et andet navn.`);
+    return;
+  }
+
+  currentName = name;
+  ratings = {};
+  $("vote-badge").textContent = name+" · Bedømmelse";
+  buildWishCards();
+  updateRatedCount();
+  showScreen("vote");
+  window.scrollTo(0,0);
+});
+
+// Submit
+$("btn-submit").addEventListener("click", submitVote);
+
+// New voter
+$("btn-new-voter").addEventListener("click", () => {
+  $("inp-name").value = "";
+  $("btn-start").disabled = true;
+  showScreen("name");
+});
+
+// Admin
+$("inp-admin").addEventListener("keydown", e => { if(e.key==="Enter") $("btn-admin").click(); });
+$("btn-admin").addEventListener("click", () => {
+  if ($("inp-admin").value === ADMIN_PASSWORD) {
+    $("admin-err").style.display = "none";
+    $("inp-admin").value = "";
+    showScreen("results");
+    loadResults();
+  } else {
+    $("admin-err").style.display = "block";
+    $("inp-admin").value = "";
+  }
+});
+
+// Back from results
+$("btn-back-results").addEventListener("click", () => {
+  if (unsubscribe) { unsubscribe(); unsubscribe=null; }
+  showScreen("name");
+});
+
+// Refresh results
+$("btn-refresh").addEventListener("click", loadResults);
+
+</script>
+</body>
+</html>
