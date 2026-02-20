@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prioritering · App</title>
+  <title>Workshop · Prioritering</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
@@ -13,7 +13,6 @@
     :root {
       --accent: #275f96;
       --accent-light: #92b9dd;
-      --accent-dim: rgba(39,95,150,0.12);
       --pink: #ffdbe2;
       --pink-mid: #ff8181;
       --bg: #f0f5fb;
@@ -22,6 +21,10 @@
       --text: #1a2e44;
       --muted: #9b9fab;
       --dim: #b8bdc6;
+      --danger: #e05252;
+      --danger-bg: rgba(224,82,82,0.08);
+      --success: #3a9e6f;
+      --success-bg: rgba(58,158,111,0.1);
     }
 
     body {
@@ -38,360 +41,278 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(39,95,150,0.2); border-radius: 3px; }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade { animation: fadeUp 0.5s ease both; }
-    .fade-d1 { animation-delay: 0.08s; }
-    .fade-d2 { animation-delay: 0.16s; }
-    .fade-d3 { animation-delay: 0.24s; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes spin   { to { transform:rotate(360deg); } }
+    @keyframes pulse  { 0%,100%{opacity:1;} 50%{opacity:.45;} }
 
-    /* ── Layout ── */
-    .page {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 48px 20px 80px;
-      min-height: 100vh;
-    }
-    .card-wrap { width: 100%; max-width: 680px; }
-    .card-wrap-wide { width: 100%; max-width: 800px; }
+    .fade    { animation: fadeUp 0.5s ease both; }
+    .fade-d1 { animation-delay:.08s; }
+    .fade-d2 { animation-delay:.16s; }
+    .fade-d3 { animation-delay:.24s; }
 
-    /* ── Badge ── */
+    /* Layout */
+    .page { display:flex; flex-direction:column; align-items:center; padding:48px 20px 80px; min-height:100vh; }
+    .card-wrap      { width:100%; max-width:680px; }
+    .card-wrap-wide { width:100%; max-width:860px; }
+
+    /* Badge */
     .badge {
-      display: inline-block;
-      padding: 6px 16px;
-      background: rgba(39,95,150,0.1);
-      border: 1px solid rgba(39,95,150,0.25);
-      border-radius: 100px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-family: 'DM Mono', monospace;
-      margin-bottom: 18px;
+      display:inline-block; padding:6px 16px;
+      background:rgba(39,95,150,0.1); border:1px solid rgba(39,95,150,0.25);
+      border-radius:100px; font-size:11px; font-weight:700;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--accent); font-family:'DM Mono',monospace; margin-bottom:18px;
     }
 
-    /* ── Header ── */
-    .page-header { text-align: center; margin-bottom: 44px; }
+    /* Header */
+    .page-header { text-align:center; margin-bottom:44px; }
     .page-header h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(26px, 5vw, 42px);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin-bottom: 10px;
+      font-family:'Syne',sans-serif; font-size:clamp(26px,5vw,42px);
+      font-weight:800; letter-spacing:-0.02em; line-height:1.15; margin-bottom:10px;
     }
-    .page-header p { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 420px; margin: 0 auto; }
+    .page-header p { font-size:15px; color:var(--muted); line-height:1.6; max-width:420px; margin:0 auto; }
 
-    /* ── Panel ── */
+    /* Panel */
     .panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 36px 40px;
-      box-shadow: 0 4px 24px rgba(39,95,150,0.08);
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:36px 40px;
+      box-shadow:0 4px 24px rgba(39,95,150,0.08);
+    }
+    .section-title {
+      font-family:'DM Mono',monospace; font-size:11px; font-weight:700;
+      letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:16px;
     }
 
-    /* ── Form elements ── */
+    /* Form */
     label.field-label {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-family: 'DM Mono', monospace;
-      margin-bottom: 8px;
+      display:block; font-size:11px; font-weight:700; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--muted);
+      font-family:'DM Mono',monospace; margin-bottom:8px;
     }
     input[type=text], input[type=password] {
-      width: 100%;
-      padding: 13px 16px;
-      background: #f5f8fc;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      color: var(--text);
-      font-size: 16px;
-      font-family: 'DM Sans', sans-serif;
-      transition: border-color 0.2s, background 0.2s;
-      outline: none;
+      width:100%; padding:13px 16px; background:#f5f8fc;
+      border:1px solid var(--border); border-radius:12px;
+      color:var(--text); font-size:16px; font-family:'DM Sans',sans-serif;
+      transition:border-color .2s, background .2s; outline:none;
     }
-    input::placeholder { color: var(--dim); }
-    input:focus {
-      border-color: rgba(39,95,150,0.5);
-      background: #fff;
-    }
+    input::placeholder { color:var(--dim); }
+    input:focus { border-color:rgba(39,95,150,.5); background:#fff; }
 
-    /* ── Buttons ── */
+    /* Buttons */
     .btn-primary {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #275f96, #1a4a78);
-      border: none;
-      border-radius: 12px;
-      color: #ffffff;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: 'Syne', sans-serif;
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.02em;
-      box-shadow: 0 6px 20px rgba(39,95,150,0.28);
+      width:100%; padding:15px;
+      background:linear-gradient(135deg,#275f96,#1a4a78);
+      border:none; border-radius:12px; color:#fff;
+      font-size:15px; font-weight:700; font-family:'Syne',sans-serif;
+      cursor:pointer; transition:all .2s; letter-spacing:.02em;
+      box-shadow:0 6px 20px rgba(39,95,150,.28);
     }
-    .btn-primary:disabled {
-      background: #e8edf3;
-      color: var(--dim);
-      box-shadow: none;
-      cursor: default;
-    }
+    .btn-primary:disabled { background:#e8edf3; color:var(--dim); box-shadow:none; cursor:default; }
     .btn-ghost {
-      padding: 11px 20px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--muted);
-      font-size: 13px;
-      font-family: 'DM Mono', monospace;
-      cursor: pointer;
-      transition: all 0.2s;
+      padding:11px 20px; background:var(--surface);
+      border:1px solid var(--border); border-radius:10px;
+      color:var(--muted); font-size:13px; font-family:'DM Mono',monospace;
+      cursor:pointer; transition:all .2s;
     }
-    .btn-ghost:hover { border-color: rgba(39,95,150,0.3); color: var(--accent); }
-    .btn-gold {
-      padding: 11px 20px;
-      background: rgba(39,95,150,0.08);
-      border: 1px solid rgba(39,95,150,0.2);
-      border-radius: 10px;
-      color: var(--accent);
-      font-size: 13px;
-      font-family: 'DM Mono', monospace;
-      cursor: pointer;
-      transition: all 0.2s;
+    .btn-ghost:hover { border-color:rgba(39,95,150,.3); color:var(--accent); }
+    .btn-accent {
+      padding:11px 20px; background:rgba(39,95,150,.08);
+      border:1px solid rgba(39,95,150,.2); border-radius:10px;
+      color:var(--accent); font-size:13px; font-family:'DM Mono',monospace;
+      cursor:pointer; transition:all .2s;
     }
-    .btn-gold:hover { background: rgba(39,95,150,0.15); }
+    .btn-accent:hover { background:rgba(39,95,150,.15); }
+    .btn-danger {
+      padding:11px 20px; background:var(--danger-bg);
+      border:1px solid rgba(224,82,82,.25); border-radius:10px;
+      color:var(--danger); font-size:13px; font-family:'DM Mono',monospace;
+      cursor:pointer; transition:all .2s;
+    }
+    .btn-danger:hover { background:rgba(224,82,82,.15); }
 
-    /* ── Progress bar ── */
-    .progress-wrap {
-      height: 4px;
-      background: rgba(39,95,150,0.1);
-      border-radius: 2px;
-      overflow: hidden;
-      max-width: 280px;
-      margin: 12px auto 0;
-    }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #275f96, #92b9dd);
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
+    /* Progress */
+    .progress-wrap { height:4px; background:rgba(39,95,150,.1); border-radius:2px; overflow:hidden; max-width:280px; margin:12px auto 0; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,#275f96,#92b9dd); border-radius:2px; transition:width .4s ease; }
 
-    /* ── Wish card ── */
+    /* Wish card */
     .wish-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px 26px;
-      display: flex;
-      gap: 18px;
-      align-items: flex-start;
-      position: relative;
-      overflow: hidden;
-      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 10px rgba(39,95,150,0.05);
+      background:var(--surface); border:1px solid var(--border); border-radius:16px;
+      padding:22px 26px; display:flex; gap:18px; align-items:flex-start;
+      position:relative; overflow:hidden;
+      transition:border-color .2s, box-shadow .2s;
+      margin-bottom:10px; box-shadow:0 2px 10px rgba(39,95,150,.05);
     }
-    .wish-card:hover { border-color: rgba(39,95,150,0.3); box-shadow: 0 4px 18px rgba(39,95,150,0.1); }
+    .wish-card:hover { border-color:rgba(39,95,150,.3); box-shadow:0 4px 18px rgba(39,95,150,.1); }
     .wish-card .accent-bar {
-      position: absolute;
-      top: 0; left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #275f96, #92b9dd);
-      border-radius: 3px 0 0 0;
-      transition: width 0.4s ease;
+      position:absolute; top:0; left:0; height:3px;
+      background:linear-gradient(90deg,#275f96,#92b9dd); transition:width .4s ease;
     }
     .wish-num {
-      min-width: 34px; height: 34px;
-      border-radius: 10px;
-      background: rgba(39,95,150,0.1);
-      border: 1px solid rgba(39,95,150,0.2);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'DM Mono', monospace;
-      font-size: 13px; font-weight: 700;
-      color: var(--accent);
-      flex-shrink: 0;
+      min-width:34px; height:34px; border-radius:10px;
+      background:rgba(39,95,150,.1); border:1px solid rgba(39,95,150,.2);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'DM Mono',monospace; font-size:13px; font-weight:700;
+      color:var(--accent); flex-shrink:0;
     }
-    .wish-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 14.5px; font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-    .wish-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 4px; }
-    .wish-detail { font-size: 11.5px; color: var(--dim); font-style: italic; margin-bottom: 14px; }
+    .wish-title  { font-family:'Syne',sans-serif; font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:6px; }
+    .wish-desc   { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:4px; }
+    .wish-detail { font-size:11.5px; color:var(--dim); font-style:italic; margin-bottom:14px; }
 
-    /* ── Stars ── */
-    .stars { display: flex; gap: 4px; align-items: center; }
-    .star-btn {
-      background: none; border: none; cursor: pointer;
-      padding: 2px; transition: transform 0.15s;
-      line-height: 0;
-    }
-    .star-btn:hover { transform: scale(1.25); }
-    .star-btn:disabled { cursor: default; }
-    .star-label {
-      font-size: 12px; font-weight: 600;
-      font-family: 'DM Mono', monospace;
-      margin-left: 6px;
-      min-width: 76px;
-    }
+    /* Stars */
+    .stars { display:flex; gap:4px; align-items:center; }
+    .star-btn { background:none; border:none; cursor:pointer; padding:2px; transition:transform .15s; line-height:0; }
+    .star-btn:hover { transform:scale(1.25); }
+    .star-label { font-size:12px; font-weight:600; font-family:'DM Mono',monospace; margin-left:6px; min-width:80px; color:var(--dim); }
 
-    /* ── Submit bar ── */
-    .submit-bar {
-      position: sticky; bottom: 20px;
-      margin-top: 28px;
-      display: flex; gap: 10px;
+    /* Submit bar */
+    .submit-bar { position:sticky; bottom:20px; margin-top:28px; display:flex; gap:10px; }
+    .submit-bar .btn-primary { box-shadow:0 8px 28px rgba(39,95,150,.35); }
+
+    /* Divider */
+    .divider { display:flex; align-items:center; gap:12px; margin:20px 0; }
+    .divider-line { height:1px; flex:1; background:var(--border); }
+    .divider-text { font-size:11px; color:var(--dim); font-family:'DM Mono',monospace; }
+
+    /* Admin tabs */
+    .admin-tabs { display:flex; gap:4px; margin-bottom:24px; flex-wrap:wrap; }
+    .admin-tab {
+      padding:9px 18px; border-radius:9px; font-size:13px;
+      font-family:'DM Mono',monospace; cursor:pointer;
+      border:1px solid transparent; transition:all .15s;
+      background:none; color:var(--muted);
     }
-    .submit-bar .btn-primary {
-      box-shadow: 0 8px 28px rgba(39,95,150,0.35);
-    }
+    .admin-tab.active { background:var(--surface); border-color:var(--border); color:var(--accent); font-weight:700; box-shadow:0 2px 8px rgba(39,95,150,.08); }
+    .admin-tab:not(.active):hover { color:var(--accent); }
 
-    /* ── Divider ── */
-    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
-    .divider-line { height: 1px; flex: 1; background: var(--border); }
-    .divider-text { font-size: 11px; color: var(--dim); font-family: 'DM Mono', monospace; }
-
-    /* ── Admin row ── */
-    .admin-row { display: flex; gap: 8px; }
-    .admin-row input { font-size: 13px; font-family: 'DM Mono', monospace; padding: 10px 14px; }
-
-    /* ── Stats bar ── */
+    /* Stats bar */
     .stats-bar {
-      display: inline-flex; gap: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px 32px;
-      margin-bottom: 36px;
-      box-shadow: 0 4px 16px rgba(39,95,150,0.08);
+      display:inline-flex; gap:24px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:16px; padding:16px 32px; margin-bottom:28px;
+      box-shadow:0 4px 16px rgba(39,95,150,.08);
     }
-    .stat { text-align: center; }
-    .stat-num { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'Syne', sans-serif; }
-    .stat-lbl { font-size: 11px; color: var(--dim); font-family: 'DM Sans', sans-serif; margin-top: 2px; }
-    .stat-sep { width: 1px; background: var(--border); }
+    .stat { text-align:center; }
+    .stat-num { font-size:28px; font-weight:800; color:var(--accent); font-family:'Syne',sans-serif; }
+    .stat-lbl { font-size:11px; color:var(--dim); margin-top:2px; }
+    .stat-sep { width:1px; background:var(--border); }
 
-    /* ── Result row ── */
-    .result-row {
-      border-radius: 12px;
-      padding: 13px 18px;
-      display: flex; align-items: center; gap: 14px;
-      position: relative; overflow: hidden;
-      margin-bottom: 8px;
-      transition: background 0.2s;
-    }
-    .result-row.top { background: #ffdbe2; border: 1px solid rgba(255,129,129,0.3); }
-    .result-row.rest { background: var(--surface); border: 1px solid var(--border); }
-    .result-bar {
-      position: absolute; bottom: 0; left: 0;
-      height: 3px;
-      transition: width 0.6s ease;
-      border-radius: 0;
-    }
-    .result-rank {
-      min-width: 28px; height: 28px;
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700;
-      flex-shrink: 0;
-    }
-    .result-title {
-      flex: 1; min-width: 0;
-      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .result-nums { display: flex; gap: 16px; align-items: center; flex-shrink: 0; }
-    .result-num { text-align: center; }
-    .result-num-val { font-size: 17px; font-weight: 800; font-family: 'DM Mono', monospace; }
-    .result-num-lbl { font-size: 10px; color: var(--dim); }
+    /* Result row */
+    .result-row { border-radius:12px; padding:13px 18px; display:flex; align-items:center; gap:14px; position:relative; overflow:hidden; margin-bottom:8px; }
+    .result-row.top  { background:var(--pink); border:1px solid rgba(255,129,129,.3); }
+    .result-row.rest { background:var(--surface); border:1px solid var(--border); }
+    .result-bar { position:absolute; bottom:0; left:0; height:3px; transition:width .6s ease; }
+    .result-rank { min-width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'DM Mono',monospace; font-size:12px; font-weight:700; flex-shrink:0; }
+    .result-title { flex:1; min-width:0; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .result-nums { display:flex; gap:16px; align-items:center; flex-shrink:0; }
+    .result-num { text-align:center; }
+    .result-num-val { font-size:17px; font-weight:800; font-family:'DM Mono',monospace; }
+    .result-num-lbl { font-size:10px; color:var(--dim); }
 
-    /* ── Thank you ── */
-    .thanks-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 70vh; }
-    .thanks-wrap h1 { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; margin: 16px 0 10px; }
-    .thanks-wrap p { color: var(--muted); font-size: 15px; max-width: 340px; margin-bottom: 28px; }
-
-    /* ── Loader ── */
-    .loader { display: flex; justify-content: center; padding: 60px; }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    /* Drop zone */
+    .drop-zone {
+      border:2px dashed var(--border); border-radius:14px; padding:32px 24px;
+      text-align:center; cursor:pointer; transition:all .2s; position:relative;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .drop-zone:hover, .drop-zone.drag-over { border-color:rgba(39,95,150,.5); background:rgba(39,95,150,.04); }
+    .drop-zone input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .drop-icon  { font-size:32px; margin-bottom:10px; }
+    .drop-label { font-size:14px; font-weight:600; color:var(--accent); margin-bottom:4px; }
+    .drop-sub   { font-size:12px; color:var(--muted); }
 
-    /* ── Voters list ── */
-    .voters-box {
-      margin-top: 28px;
-      padding: 18px 20px;
-      background: rgba(146,185,221,0.15);
-      border: 1px solid rgba(39,95,150,0.2);
-      border-radius: 12px;
-      font-size: 13px; color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      line-height: 1.7;
-    }
+    /* CSV preview */
+    .csv-preview { background:#f5f8fc; border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-top:14px; max-height:260px; overflow-y:auto; }
+    .csv-preview table { width:100%; border-collapse:collapse; font-size:12px; }
+    .csv-preview th { background:rgba(39,95,150,.08); padding:8px 12px; text-align:left; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); position:sticky; top:0; border-bottom:1px solid var(--border); }
+    .csv-preview td { padding:7px 12px; border-bottom:1px solid rgba(39,95,150,.06); color:var(--text); line-height:1.4; vertical-align:top; }
+    .csv-preview tr:last-child td { border-bottom:none; }
+    .col-num { color:var(--dim); font-family:'DM Mono',monospace; width:32px; }
 
-    @media (max-width: 500px) {
-      .panel { padding: 24px 20px; }
-      .stats-bar { gap: 14px; padding: 14px 18px; }
+    /* Alerts */
+    .alert { padding:12px 16px; border-radius:10px; font-size:13px; margin-top:12px; display:flex; gap:10px; align-items:flex-start; }
+    .alert-success { background:var(--success-bg); border:1px solid rgba(58,158,111,.25); color:var(--success); }
+    .alert-danger  { background:var(--danger-bg);  border:1px solid rgba(224,82,82,.25);  color:var(--danger); }
+    .alert-info    { background:rgba(39,95,150,.06); border:1px solid var(--border); color:var(--accent); }
+
+    /* Loader */
+    .loader { display:flex; justify-content:center; padding:60px; }
+    .spinner { width:34px; height:34px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .8s linear infinite; }
+
+    /* App loader */
+    #app-loader { position:fixed; inset:0; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; z-index:999; }
+    #app-loader .spinner { width:44px; height:44px; }
+    #app-loader p { font-size:14px; color:var(--muted); animation:pulse 1.5s infinite; }
+
+    /* Voters box */
+    .voters-box { margin-top:24px; padding:16px 18px; background:rgba(146,185,221,.12); border:1px solid rgba(39,95,150,.18); border-radius:12px; font-size:13px; color:var(--muted); line-height:1.7; }
+
+    /* Thanks */
+    .thanks-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:70vh; }
+    .thanks-wrap h1 { font-family:'Syne',sans-serif; font-size:36px; font-weight:800; margin:16px 0 10px; }
+    .thanks-wrap p  { color:var(--muted); font-size:15px; max-width:340px; margin-bottom:28px; }
+
+    /* Empty state */
+    .empty-state { text-align:center; padding:60px 24px; background:var(--surface); border:1px solid var(--border); border-radius:20px; box-shadow:0 4px 24px rgba(39,95,150,.06); }
+    .empty-icon   { font-size:48px; margin-bottom:16px; }
+    .empty-state h2 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; margin-bottom:8px; }
+    .empty-state p  { color:var(--muted); font-size:14px; line-height:1.6; max-width:320px; margin:0 auto; }
+
+    @media(max-width:520px){
+      .panel{padding:24px 18px;}
+      .stats-bar{gap:14px;padding:14px 18px;}
+      .result-nums{gap:10px;}
     }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════ -->
-<!--  SCREENS (shown/hidden via JS)                      -->
-<!-- ═══════════════════════════════════════════════════ -->
+<!-- App loader -->
+<div id="app-loader">
+  <div class="spinner"></div>
+  <p>Indlæser workshop…</p>
+</div>
 
-<!-- NAME SCREEN -->
-<div id="screen-name" class="page">
+<!-- ══════════════════════════════════════ NAME ══ -->
+<div id="screen-name" class="page" style="display:none;">
   <div class="card-wrap">
     <div class="page-header fade">
-      <div class="badge">Prioritering · Workshop</div>
+      <div class="badge" id="name-badge">Workshop · Prioritering</div>
       <h1>Prioriter vores ønsker</h1>
-      <p>Bedøm hvert ønske fra 1–5 stjerner. De 5 ønsker med flest point bliver valgt og dem går vi videre med</p>
+      <p>Bedøm hvert ønske fra 1–5 stjerner. De 5 ønsker med flest point går videre til udvikling.</p>
     </div>
-    <div class="panel fade fade-d1">
-      <label class="field-label" for="inp-name">Dit navn</label>
-      <input type="text" id="inp-name" placeholder="Skriv dit fulde navn..." autocomplete="off" style="margin-bottom:20px;" />
-      <button class="btn-primary" id="btn-start" disabled>Start bedømmelse →</button>
+
+    <div id="no-wishes-state" class="empty-state fade fade-d1" style="display:none;">
+      <div class="empty-icon">📋</div>
+      <h2>Ingen ønsker endnu</h2>
+      <p>Administratoren skal uploade en CSV-fil med ønsker, før workshoppen kan begynde.</p>
+    </div>
+
+    <div id="name-form-wrap" style="display:none;">
+      <div class="panel fade fade-d1">
+        <label class="field-label" for="inp-name">Dit navn</label>
+        <input type="text" id="inp-name" placeholder="Skriv dit fulde navn…" autocomplete="off" style="margin-bottom:20px;" />
+        <button class="btn-primary" id="btn-start" disabled>Start bedømmelse →</button>
+      </div>
     </div>
 
     <div class="divider fade fade-d2">
-      <div class="divider-line"></div>
-      <span class="divider-text">ADMIN</span>
-      <div class="divider-line"></div>
+      <div class="divider-line"></div><span class="divider-text">ADMIN</span><div class="divider-line"></div>
     </div>
-    <div class="admin-row fade fade-d3">
-      <input type="password" id="inp-admin" placeholder="Adgangskode til resultater..." style="flex:1;" />
-      <button class="btn-ghost" id="btn-admin">Se resultater</button>
+    <div style="display:flex;gap:8px;" class="fade fade-d3">
+      <input type="password" id="inp-admin" placeholder="Adgangskode til admin…" style="flex:1;font-size:13px;font-family:'DM Mono',monospace;padding:10px 14px;" />
+      <button class="btn-ghost" id="btn-admin">Åbn admin →</button>
     </div>
-    <p id="admin-err" style="font-size:12px;color:#c0554a;margin-top:8px;display:none;">Forkert adgangskode</p>
+    <p id="admin-err" style="font-size:12px;color:var(--danger);margin-top:8px;display:none;">Forkert adgangskode</p>
   </div>
 </div>
 
-<!-- VOTE SCREEN -->
+<!-- ══════════════════════════════════════ VOTE ══ -->
 <div id="screen-vote" class="page" style="display:none;">
   <div class="card-wrap-wide">
-    <div class="page-header fade" id="vote-header">
+    <div class="page-header fade">
       <div class="badge" id="vote-badge">… · Bedømmelse</div>
-      <h1>Bedøm alle 13 ønsker</h1>
-      <p>Bedøm mindst 5 ønsker · <span id="rated-count">0</span>/13 bedømt</p>
-      <div class="progress-wrap">
-        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
-      </div>
+      <h1>Bedøm ønskerne</h1>
+      <p><span id="rated-count">0</span>/<span id="total-count">0</span> bedømt · Minimum 5 for at indsende</p>
+      <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
     <div id="wishes-list"></div>
     <div class="submit-bar">
@@ -400,54 +321,157 @@
   </div>
 </div>
 
-<!-- THANKS SCREEN -->
+<!-- ══════════════════════════════════════ THANKS ══ -->
 <div id="screen-thanks" class="page" style="display:none;">
   <div class="thanks-wrap fade">
     <div style="font-size:64px;">⭐</div>
     <h1 id="thanks-name">Tak!</h1>
-    <p>Din bedømmelse er registreret i realtid. Resultaterne vil blive vist af workshoplederen.</p>
+    <p>Din bedømmelse er registreret. Resultaterne vises af workshoplederen.</p>
     <button class="btn-ghost" id="btn-new-voter">← Ny deltager</button>
   </div>
 </div>
 
-<!-- RESULTS SCREEN -->
-<div id="screen-results" class="page" style="display:none;">
+<!-- ══════════════════════════════════════ ADMIN ══ -->
+<div id="screen-admin" class="page" style="display:none;">
   <div class="card-wrap-wide">
     <div class="page-header fade">
-      <div class="badge">Live Resultater</div>
-      <h1>Prioriteringsresultater</h1>
-      <p>Sorteret efter samlet point-score · Top 5 markeret med 🏆</p>
+      <div class="badge">Admin Panel</div>
+      <h1>Workshop Administration</h1>
+      <p>Upload ønsker, se live resultater og administrer workshoppen</p>
     </div>
-    <div style="text-align:center;">
-      <div class="stats-bar">
-        <div class="stat"><div class="stat-num" id="r-voters">0</div><div class="stat-lbl">Deltagere</div></div>
-        <div class="stat-sep"></div>
-        <div class="stat"><div class="stat-num">5</div><div class="stat-lbl">Vindere</div></div>
-        <div class="stat-sep"></div>
-        <div class="stat"><div class="stat-num">13</div><div class="stat-lbl">Ønsker</div></div>
+
+    <div class="admin-tabs fade">
+      <button class="admin-tab active" data-tab="tab-results">📊 Resultater</button>
+      <button class="admin-tab" data-tab="tab-wishes">📋 Ønsker &amp; CSV</button>
+      <button class="admin-tab" data-tab="tab-settings">⚙️ Indstillinger</button>
+    </div>
+
+    <!-- ─── TAB: Results ─── -->
+    <div id="tab-results">
+      <div style="text-align:center;">
+        <div class="stats-bar">
+          <div class="stat"><div class="stat-num" id="r-voters">0</div><div class="stat-lbl">Deltagere</div></div>
+          <div class="stat-sep"></div>
+          <div class="stat"><div class="stat-num" id="r-top">5</div><div class="stat-lbl">Vindere</div></div>
+          <div class="stat-sep"></div>
+          <div class="stat"><div class="stat-num" id="r-wishes">0</div><div class="stat-lbl">Ønsker</div></div>
+        </div>
+      </div>
+      <div id="results-loading" class="loader"><div class="spinner"></div></div>
+      <div id="results-list" style="display:none;"></div>
+      <div id="results-empty" style="display:none;text-align:center;padding:50px 0;color:var(--muted);">Ingen stemmer endnu. Vent på deltagerne.</div>
+      <div id="voters-box" class="voters-box" style="display:none;"></div>
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+        <button class="btn-ghost"   id="btn-back-admin">← Tilbage</button>
+        <button class="btn-accent"  id="btn-refresh">↻ Live opdatering</button>
+        <button class="btn-ghost"   id="btn-export-csv" style="margin-left:auto;">⬇ Eksporter CSV</button>
       </div>
     </div>
-    <div id="results-loading" class="loader"><div class="spinner"></div></div>
-    <div id="results-list" style="display:none;"></div>
-    <div id="results-empty" style="display:none;text-align:center;padding:60px 0;color:var(--dim);">Ingen stemmer endnu. Vent på deltagerne.</div>
-    <div id="voters-box" class="voters-box" style="display:none;"></div>
-    <div style="display:flex;gap:10px;margin-top:20px;">
-      <button class="btn-ghost" id="btn-back-results">← Tilbage</button>
-      <button class="btn-gold" id="btn-refresh">↻ Opdater live</button>
+
+    <!-- ─── TAB: Wishes / CSV ─── -->
+    <div id="tab-wishes" style="display:none;">
+
+      <!-- Current wishes -->
+      <div class="panel">
+        <div class="section-title">Aktive ønsker</div>
+        <div id="current-wishes-info" style="color:var(--muted);font-size:14px;">Indlæser…</div>
+      </div>
+
+      <!-- Upload CSV -->
+      <div class="panel" style="margin-top:16px;">
+        <div class="section-title">Upload nye ønsker (CSV)</div>
+
+        <div class="alert alert-info" style="margin-bottom:16px;">
+          <span>ℹ️</span>
+          <div style="line-height:1.6;">
+            CSV skal have tre kolonner: <strong>title</strong>, <strong>description</strong>, <strong>detail</strong>.<br/>
+            Første linje = kolonneoverskrifter. Brug komma som separator. Tekst med komma sættes i anførselstegn.<br/>
+            <a id="btn-download-sample" href="#" style="color:var(--accent);font-weight:600;display:inline-block;margin-top:6px;">⬇ Download eksempel-CSV</a>
+          </div>
+        </div>
+
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="csv-file-input" accept=".csv,text/csv" />
+          <div class="drop-icon">📂</div>
+          <div class="drop-label">Klik eller træk CSV-fil hertil</div>
+          <div class="drop-sub">Kun .csv filer · UTF-8 anbefales</div>
+        </div>
+
+        <div id="csv-feedback"></div>
+
+        <div id="csv-preview-wrap" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px;">
+            <span style="font-size:13px;font-weight:600;color:var(--text);">
+              Forhåndsvisning — <span id="csv-row-count">0</span> ønsker fundet
+            </span>
+            <button class="btn-ghost" id="btn-clear-csv" style="padding:6px 12px;font-size:12px;">✕ Ryd</button>
+          </div>
+          <div class="csv-preview">
+            <table>
+              <thead><tr><th>#</th><th>Titel</th><th>Beskrivelse</th><th>Detalje</th></tr></thead>
+              <tbody id="csv-preview-body"></tbody>
+            </table>
+          </div>
+          <div style="margin-top:14px;">
+            <button class="btn-primary" id="btn-upload-wishes">✓ Gem ønsker til workshoppen</button>
+          </div>
+        </div>
+
+        <div id="upload-success" class="alert alert-success" style="display:none;">
+          <span>✓</span><div>Ønsker gemt! Deltagerne kan nu begynde at stemme.</div>
+        </div>
+      </div>
     </div>
+
+    <!-- ─── TAB: Settings ─── -->
+    <div id="tab-settings" style="display:none;">
+
+      <div class="panel">
+        <div class="section-title">Workshop navn</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.6;">Vises som titel på deltagersiden.</p>
+        <input type="text" id="inp-workshop-name" placeholder="f.eks. HubSpot Helpdesk Q1 2026" style="margin-bottom:12px;" />
+        <button class="btn-accent" id="btn-save-name" style="width:100%;padding:12px;">Gem navn</button>
+        <div id="name-saved" class="alert alert-success" style="display:none;"><span>✓</span><div>Navn gemt!</div></div>
+      </div>
+
+      <!-- UPDATED: full workshop reset -->
+      <div class="panel" style="margin-top:16px;">
+        <div class="section-title">Nulstil workshop</div>
+        <p style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.6;">
+          Slet alle ønsker og alle stemmer og start en helt ny workshop.
+          Efter nulstilling skal der uploades en ny CSV-fil med ønsker.
+        </p>
+        <button class="btn-danger" id="btn-reset-votes" style="width:100%;">🗑 Nulstil workshop</button>
+        <div id="reset-confirm" style="display:none;margin-top:12px;">
+          <div class="alert alert-danger">
+            <span>⚠️</span>
+            <div>
+              <strong>Er du sikker?</strong> Dette sletter alle ønsker og alle stemmer permanent og kan ikke fortrydes.
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <button class="btn-danger" id="btn-confirm-reset" style="padding:8px 16px;">Ja, nulstil nu</button>
+                <button class="btn-ghost" id="btn-cancel-reset" style="padding:8px 16px;">Annuller</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="reset-done" class="alert alert-success" style="display:none;margin-top:12px;">
+          <span>✓</span><div>Workshop nulstillet. Upload nye ønsker for at starte igen.</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════ -->
-<!--  FIREBASE + APP LOGIC                               -->
-<!-- ═══════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════ JS ══ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy
+  getFirestore, collection, addDoc, getDocs, deleteDoc,
+  onSnapshot, doc, setDoc, getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ── Firebase config ──────────────────────────────────
+/* ── Firebase config ── */
 const firebaseConfig = {
   apiKey: "AIzaSyDZnCVzCmqpdHMbocyZizArRoKtAS1bR0U",
   authDomain: "hubspot-prioritering.firebaseapp.com",
@@ -459,370 +483,491 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db  = getFirestore(app);
-const VOTES_COL = "votes";
-const ADMIN_PASSWORD = "admin2024"; // ← change this!
 
-// ── Wishes data ──────────────────────────────────────
-const wishes = [
-  { id:1,  title:"Automatiske flows & sagslukning",
-    desc:"Vi skal løse problemer med de automatiske flows, særligt dem der håndterer sagslukning og tilhørende kundekommunikation.",
-    detail:"Dækker: Fejlende automatiske flows og inkonsekvente sagslukkeregler." },
-  { id:2,  title:"Team-specifikke visninger & ressourceplanlægning",
-    desc:"Vi skal sikre, at team-specifikke visninger som 'Mit teams åbne' afspejler de korrekte sagslukkeregler og teamprocesser, så de kan bruges effektivt til overblik og ressourceplanlægning.",
-    detail:"Dækker: Udfordringer med forskellige sagslukkeregler for Teknisk Support og Kundeservice." },
-  { id:3,  title:"Telefoni direkte i HubSpot",
-    desc:"Vi skal implementere telefoni direkte i HubSpot for at samle al kundedata og kommunikation ét sted.",
-    detail:"Dækker: Ønske om at integrere telefoni for at undgå brug af flere systemer som Aircall." },
-  { id:4,  title:"Korrekt afsendermail & professionalisme",
-    desc:"Vi skal sikre, at den korrekte afsendermail automatisk vælges baseret på pipeline eller modtager, når vi besvarer henvendelser, for at opretholde professionalisme og effektivitet.",
-    detail:"Dækker: Problem med ukorrekt forlagsmail, hvis man glemmer at tjekke." },
-  { id:5,  title:"Søge- & oprettelsesfunktioner for kontakter",
-    desc:"Vi skal forbedre søge- og oprettelsesfunktionerne for kontakter og virksomheder, inklusiv søgning på institutionsnummer, for at sikre korrekte data og forebygge dubletter.",
-    detail:"Dækker: Manglende søgning på institutionsnummer og duplikerede kontakter." },
-  { id:6,  title:"Uafhængige mailtråde i Helpdesk",
-    desc:"Vi skal forbedre mulighederne for at oprette nye, uafhængige mailtråde i Helpdesk, selv når der er eksisterende korrespondance.",
-    detail:"Dækker: Begrænsningen om mulighed for at starte en separat mailtråd." },
-  { id:7,  title:"Reducere unødige informationer & pop-ups",
-    desc:"Vi skal forbedre overblikket i sager og reducere mængden af unødige informationer, knapper og pop-up vinduer, så de seneste svar og relevante data er nemme at finde uden forvirring.",
-    detail:"Dækker: Uoverskuelighed i lange korrespondancer, for mange forstyrrende elementer." },
-  { id:8,  title:"Oprydning & dubletfletning af kontakter",
-    desc:"Vi skal gennemføre en omfattende oprydning og dubletfletning af eksisterende virksomheder og kontakter, især for Praxis, for at sikre datakvalitet.",
-    detail:"Dækker: Behov for en stor oprydning i duplikerede virksomheds- og kontaktdata." },
-  { id:9,  title:"Abonnements- & dealdata overblik",
-    desc:"Vi skal optimere overblikket over abonnements- og dealdata på virksomheds- og kontaktkort, så relevante informationer er let tilgængelige.",
-    detail:"Dækker: Manglende/svært tilgængeligt abonnements- og dealoverview." },
-  { id:10, title:"Filtrering & visning i aktivitetssektionen",
-    desc:"Vi skal forbedre filtrerings- og visningsmuligheder i aktivitetssektionen, inklusiv en specifik Helpdesk-fane, og fjerne unødvendige detaljer som Call ID og GMT+1.",
-    detail:"Dækker: Ønske om bedre filtrering af aktiviteter og fjernelse af forstyrrende elementer." },
-  { id:11, title:"Effektiv brug af filtre til sagsoverblik",
-    desc:"Vi skal sikre og videreudvikle vores effektive brug af filtre til at opretholde et klart overblik over nye og ventende sager.",
-    detail:"Dækker: Det som allerede virker godt med overblik og filtre." },
-  { id:12, title:"Intern kollaboration & sagsnotater",
-    desc:"Vi skal fortsat styrke den nemme interne kollaboration og deling af sagsnotater og kundehistorik for at sikre et effektivt informationsflow mellem afdelinger.",
-    detail:"Dækker: Det som allerede virker godt med samarbejde, notater og historik." },
-  { id:13, title:"Statusændring, tags & ticket-ejere",
-    desc:"Vi skal udnytte og optimere den smidige funktionalitet til at ændre status, tilføje tags og skifte ticket-ejere for en effektiv sagsbehandling.",
-    detail:"Dækker: Det som allerede virker godt med håndtering af status, tags og tildeling." }
-];
+const VOTES_COL  = "votes";
+const CONFIG_DOC = "config/workshop";
+const ADMIN_PASS = "admin2024"; // ← change this!
 
-// ── State ─────────────────────────────────────────────
-let currentName = "";
-let ratings = {}; // { wishId: 1-5 }
-let unsubscribe = null;
+/* ── State ── */
+let wishes       = [];
+let currentName  = "";
+let ratings      = {};
+let parsedCSV    = [];
+let unsubscribe  = null;
+let workshopName = "Workshop · Prioritering";
 
-// ── Helpers ───────────────────────────────────────────
-const $ = id => document.getElementById(id);
-const starLabels = ["","Lav","Under middel","Middel","Høj","Kritisk"];
+/* ── Helpers ── */
+const $  = id => document.getElementById(id);
+const SL = ["","Lav","Under middel","Middel","Høj","Kritisk"];
 
 function showScreen(name) {
-  ["name","vote","thanks","results"].forEach(s => {
-    $("screen-"+s).style.display = s===name ? "flex" : "none";
-  });
+  ["name","vote","thanks","admin"].forEach(s =>
+    $("screen-"+s).style.display = s===name ? "flex" : "none"
+  );
+  if (name !== "admin" && unsubscribe) { unsubscribe(); unsubscribe = null; }
 }
 
+/* ── Admin tabs ── */
+document.querySelectorAll(".admin-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".admin-tab").forEach(t => t.classList.remove("active"));
+    btn.classList.add("active");
+    ["tab-results","tab-wishes","tab-settings"].forEach(id =>
+      $(id).style.display = id === btn.dataset.tab ? "block" : "none"
+    );
+    if (btn.dataset.tab === "tab-results")  loadResults();
+    if (btn.dataset.tab === "tab-wishes")   renderCurrentWishes();
+    if (btn.dataset.tab === "tab-settings") {
+      $("inp-workshop-name").value = workshopName;
+      $("reset-confirm").style.display = "none";
+      $("reset-done").style.display    = "none";
+      $("name-saved").style.display    = "none";
+    }
+  });
+});
+
+/* ═══════════════════════ BOOT ═══════════════════════ */
+async function boot() {
+  try {
+    const snap = await getDoc(doc(db, CONFIG_DOC));
+    if (snap.exists()) {
+      const d    = snap.data();
+      wishes       = d.wishes       || [];
+      workshopName = d.workshopName || workshopName;
+    }
+  } catch(e) { console.warn("Boot error:", e); }
+  applyName();
+  renderNameScreen();
+  $("app-loader").style.display = "none";
+  showScreen("name");
+}
+
+function applyName() {
+  document.title              = workshopName;
+  $("name-badge").textContent = workshopName;
+}
+
+function renderNameScreen() {
+  const hasWishes = wishes.length > 0;
+  $("no-wishes-state").style.display = hasWishes ? "none"  : "block";
+  $("name-form-wrap").style.display  = hasWishes ? "block" : "none";
+}
+
+/* ═══════════════════════ VOTING ═══════════════════════ */
 function updateRatedCount() {
   const count = Object.values(ratings).filter(r=>r>0).length;
-  $("rated-count").textContent = count;
-  $("progress-fill").style.width = (count/13*100)+"%";
+  const total = wishes.length;
+  $("rated-count").textContent   = count;
+  $("total-count").textContent   = total;
+  const pct = total ? (count / total * 100) : 0;
+  $("progress-fill").style.width = pct + "%";
   const btn = $("btn-submit");
-  if (count >= 5) {
-    btn.disabled = false;
+  const MIN_VOTES = 5;
+  if (count >= MIN_VOTES) {
+    btn.disabled    = false;
     btn.textContent = `Indsend ${count} bedømmelser ✓`;
   } else {
-    btn.disabled = true;
-    btn.textContent = `Bedøm ${5-count} mere til indsendelse…`;
+    btn.disabled    = true;
+    btn.textContent = `Bedøm ${MIN_VOTES-count} mere til indsendelse…`;
   }
 }
 
-// ── Render star widget ────────────────────────────────
-function renderStars(wishId) {
-  const wrap = document.createElement("div");
-  wrap.className = "stars";
-  wrap.id = "stars-"+wishId;
+function starSVG(filled) {
+  return `<svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+      fill="${filled?"#275f96":"none"}" stroke="${filled?"#275f96":"#c5cdd8"}"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
 
-  for (let s=1; s<=5; s++) {
+function previewStars(wid, n) {
+  const w = $("stars-"+wid); if (!w) return;
+  w.querySelectorAll(".star-btn").forEach(b => b.innerHTML = starSVG(+b.dataset.star <= n));
+}
+
+function setRating(wid, val) {
+  ratings[wid] = val;
+  previewStars(wid, val);
+  const lbl = $("star-lbl-"+wid);
+  if (lbl) { lbl.textContent = SL[val]; lbl.style.color = "#275f96"; }
+  const bar = document.querySelector(`.wish-card[data-wish="${wid}"] .accent-bar`);
+  if (bar) bar.style.width = (val/5*100)+"%";
+  updateRatedCount();
+}
+
+function renderStars(wid) {
+  const wrap = document.createElement("div");
+  wrap.className = "stars"; wrap.id = "stars-"+wid;
+  for (let s=1;s<=5;s++) {
     const btn = document.createElement("button");
     btn.className = "star-btn";
-    btn.dataset.wish = wishId;
-    btn.dataset.star = s;
+    btn.dataset.wish = wid; btn.dataset.star = s;
     btn.innerHTML = starSVG(false);
-    btn.addEventListener("click", () => setRating(wishId, s));
-    btn.addEventListener("mouseenter", () => previewStars(wishId, s));
-    btn.addEventListener("mouseleave", () => previewStars(wishId, ratings[wishId]||0));
+    btn.addEventListener("click",      ()=> setRating(wid, s));
+    btn.addEventListener("mouseenter", ()=> previewStars(wid, s));
+    btn.addEventListener("mouseleave", ()=> previewStars(wid, ratings[wid]||0));
     wrap.appendChild(btn);
   }
   const lbl = document.createElement("span");
-  lbl.className = "star-label";
-  lbl.id = "star-lbl-"+wishId;
-  lbl.style.color = "var(--dim)";
-  lbl.textContent = "Ikke vurderet";
+  lbl.className="star-label"; lbl.id="star-lbl-"+wid;
+  lbl.textContent="Ikke vurderet";
   wrap.appendChild(lbl);
   return wrap;
 }
 
-function starSVG(filled) {
-  return `<svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-      fill="${filled?"#275f96":"none"}"
-      stroke="${filled?"#275f96":"#c5cdd8"}"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>`;
-}
-
-function previewStars(wishId, upTo) {
-  const wrap = $("stars-"+wishId);
-  if (!wrap) return;
-  wrap.querySelectorAll(".star-btn").forEach(btn => {
-    btn.innerHTML = starSVG(+btn.dataset.star <= upTo);
-  });
-}
-
-function setRating(wishId, value) {
-  ratings[wishId] = value;
-  previewStars(wishId, value);
-  const lbl = $("star-lbl-"+wishId);
-  if (lbl) {
-    lbl.textContent = starLabels[value];
-    lbl.style.color = "#275f96";
-  }
-  // accent bar
-  const card = document.querySelector(`.wish-card[data-wish="${wishId}"] .accent-bar`);
-  if (card) card.style.width = (value/5*100)+"%";
-  updateRatedCount();
-}
-
-// ── Build vote screen ─────────────────────────────────
 function buildWishCards() {
-  const list = $("wishes-list");
-  list.innerHTML = "";
-  wishes.forEach((w, i) => {
+  const list = $("wishes-list"); list.innerHTML="";
+  wishes.forEach((w,i) => {
     const card = document.createElement("div");
-    card.className = "wish-card";
-    card.dataset.wish = w.id;
+    card.className="wish-card"; card.dataset.wish=w.id;
 
-    const bar = document.createElement("div");
-    bar.className = "accent-bar";
-    bar.style.width = "0%";
-    card.appendChild(bar);
+    const ab=document.createElement("div"); ab.className="accent-bar"; ab.style.width="0%";
+    card.appendChild(ab);
 
-    const num = document.createElement("div");
-    num.className = "wish-num";
-    num.textContent = String(i+1).padStart(2,"0");
+    const num=document.createElement("div"); num.className="wish-num";
+    num.textContent=String(i+1).padStart(2,"0");
     card.appendChild(num);
 
-    const body = document.createElement("div");
-    body.style.flex = "1";
-
-    const title = document.createElement("div");
-    title.className = "wish-title";
-    title.textContent = w.title;
-    body.appendChild(title);
-
-    const desc = document.createElement("div");
-    desc.className = "wish-desc";
-    desc.textContent = w.desc;
-    body.appendChild(desc);
-
-    const detail = document.createElement("div");
-    detail.className = "wish-detail";
-    detail.textContent = w.detail;
-    body.appendChild(detail);
-
+    const body=document.createElement("div"); body.style.flex="1";
+    const t=document.createElement("div"); t.className="wish-title"; t.textContent=w.title;
+    const d=document.createElement("div"); d.className="wish-desc";  d.textContent=w.desc||w.description||"";
+    body.appendChild(t); body.appendChild(d);
+    if (w.detail) {
+      const dt=document.createElement("div"); dt.className="wish-detail"; dt.textContent=w.detail;
+      body.appendChild(dt);
+    }
     body.appendChild(renderStars(w.id));
     card.appendChild(body);
     list.appendChild(card);
   });
 }
 
-// ── Submit vote ───────────────────────────────────────
 async function submitVote() {
-  const btn = $("btn-submit");
-  btn.disabled = true;
-  btn.textContent = "Gemmer…";
+  const btn=$("btn-submit"); btn.disabled=true; btn.textContent="Gemmer…";
   try {
-    await addDoc(collection(db, VOTES_COL), {
-      name: currentName,
-      ratings: ratings,
-      timestamp: Date.now()
-    });
+    await addDoc(collection(db, VOTES_COL), { name:currentName, ratings, timestamp:Date.now() });
     $("thanks-name").textContent = "Tak, "+currentName+"!";
     showScreen("thanks");
   } catch(e) {
-    alert("Fejl ved gemning: "+e.message);
-    btn.disabled = false;
-    updateRatedCount();
+    alert("Fejl: "+e.message); btn.disabled=false; updateRatedCount();
   }
 }
 
-// ── Fetch & render results ────────────────────────────
+/* ═══════════════════════ RESULTS ═══════════════════════ */
 async function loadResults() {
   $("results-loading").style.display = "flex";
   $("results-list").style.display    = "none";
   $("results-empty").style.display   = "none";
   $("voters-box").style.display      = "none";
-
-  if (unsubscribe) { unsubscribe(); }
-
-  // Use onSnapshot for live updates
-  unsubscribe = onSnapshot(collection(db, VOTES_COL), (snap) => {
-    const allVotes = snap.docs.map(d => d.data());
-    renderResults(allVotes);
+  $("r-wishes").textContent = wishes.length;
+  $("r-top").textContent    = Math.min(5, wishes.length);
+  if (unsubscribe) unsubscribe();
+  unsubscribe = onSnapshot(collection(db, VOTES_COL), snap => {
+    renderResults(snap.docs.map(d=>d.data()));
   });
 }
 
 function renderResults(allVotes) {
   $("results-loading").style.display = "none";
   $("r-voters").textContent = allVotes.length;
+  if (!allVotes.length) { $("results-empty").style.display="block"; return; }
 
-  if (allVotes.length === 0) {
-    $("results-empty").style.display = "block";
-    return;
-  }
-
-  // Compute totals
+  const top5   = Math.min(5, wishes.length);
   const totals = wishes.map(w => {
-    const ratingsList = allVotes.flatMap(v => {
-      const r = v.ratings && v.ratings[w.id];
-      return r ? [r] : [];
-    });
-    const sum = ratingsList.reduce((a,b)=>a+b, 0);
-    const avg = ratingsList.length ? (sum/ratingsList.length).toFixed(1) : "—";
-    return { wish:w, sum, avg, count:ratingsList.length };
+    const rs  = allVotes.flatMap(v => { const r=v.ratings&&v.ratings[w.id]; return r?[r]:[]; });
+    const sum = rs.reduce((a,b)=>a+b,0);
+    const avg = rs.length ? (sum/rs.length).toFixed(1) : "—";
+    return { wish:w, sum, avg, count:rs.length };
   });
+  totals.sort((a,b)=>b.sum-a.sum||parseFloat(b.avg||0)-parseFloat(a.avg||0));
+  const maxSum = totals[0]?.sum||1;
 
-  totals.sort((a,b) => b.sum - a.sum || parseFloat(b.avg||0) - parseFloat(a.avg||0));
-  const maxSum = totals[0]?.sum || 1;
-
-  const list = $("results-list");
-  list.innerHTML = "";
-
-  // Section label
-  const lbl = document.createElement("div");
-  lbl.style.cssText="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;";
-  lbl.textContent = "Rangering — Top 5 går videre til udvikling";
+  const list=$("results-list"); list.innerHTML="";
+  const lbl=document.createElement("div");
+  lbl.style.cssText="font-family:'DM Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;";
+  lbl.textContent=`Rangering — Top ${top5} går videre til udvikling`;
   list.appendChild(lbl);
 
-  totals.forEach((item, idx) => {
-    const isTop = idx < 5;
-    const pct = maxSum > 0 ? (item.sum/maxSum*100) : 0;
+  totals.forEach((item,idx) => {
+    const isTop=idx<top5, pct=maxSum>0?(item.sum/maxSum*100):0;
+    const row=document.createElement("div"); row.className="result-row "+(isTop?"top":"rest");
 
-    const row = document.createElement("div");
-    row.className = "result-row " + (isTop?"top":"rest");
-
-    // bottom progress bar
-    const bar = document.createElement("div");
-    bar.className = "result-bar";
-    bar.style.cssText = `width:${pct}%; background:${isTop?"linear-gradient(90deg,#275f96,#92b9dd)":"rgba(39,95,150,0.08)"};`;
+    const bar=document.createElement("div"); bar.className="result-bar";
+    bar.style.cssText=`width:${pct}%;background:${isTop?"linear-gradient(90deg,#275f96,#92b9dd)":"rgba(39,95,150,.08)"};`;
     row.appendChild(bar);
 
-    // rank badge
-    const rank = document.createElement("div");
-    rank.className = "result-rank";
-    rank.style.cssText = `background:${isTop?"rgba(255,219,226,0.8)":"rgba(39,95,150,0.07)"}; color:${isTop?"#275f96":"#9b9fab"};`;
-    rank.textContent = idx+1;
-    row.appendChild(rank);
+    const rank=document.createElement("div"); rank.className="result-rank";
+    rank.style.cssText=`background:${isTop?"rgba(255,219,226,.9)":"rgba(39,95,150,.07)"};color:${isTop?"#275f96":"#9b9fab"};`;
+    rank.textContent=idx+1; row.appendChild(rank);
 
-    if (isTop) {
-      const trophy = document.createElement("span");
-      trophy.textContent = "🏆";
-      trophy.style.fontSize = "15px";
-      row.appendChild(trophy);
-    }
+    if(isTop){const t=document.createElement("span");t.textContent="🏆";t.style.fontSize="14px";row.appendChild(t);}
 
-    const title = document.createElement("div");
-    title.className = "result-title";
-    title.style.color = isTop ? "#1a2e44" : "var(--muted)";
-    title.textContent = item.wish.title;
-    row.appendChild(title);
+    const title=document.createElement("div"); title.className="result-title";
+    title.style.color=isTop?"#1a2e44":"var(--muted)";
+    title.textContent=item.wish.title; row.appendChild(title);
 
-    const nums = document.createElement("div");
-    nums.className = "result-nums";
-    [
-      { val: item.sum,   lbl: "point",   color: isTop?"#275f96":"#9b9fab" },
-      { val: item.avg,   lbl: "snit",    color: isTop?"#92b9dd":"#9b9fab" },
-      { val: item.count, lbl: "stemmer", color: "#9b9fab" },
-    ].forEach(n => {
-      const d = document.createElement("div");
-      d.className = "result-num";
-      d.innerHTML = `<div class="result-num-val" style="color:${n.color}">${n.val}</div><div class="result-num-lbl">${n.lbl}</div>`;
+    const nums=document.createElement("div"); nums.className="result-nums";
+    [{val:item.sum,lbl:"point",color:isTop?"#275f96":"#9b9fab"},
+     {val:item.avg,lbl:"snit", color:isTop?"#92b9dd":"#9b9fab"},
+     {val:item.count,lbl:"stemmer",color:"#9b9fab"}].forEach(n=>{
+      const d=document.createElement("div"); d.className="result-num";
+      d.innerHTML=`<div class="result-num-val" style="color:${n.color}">${n.val}</div><div class="result-num-lbl">${n.lbl}</div>`;
       nums.appendChild(d);
     });
-    row.appendChild(nums);
-    list.appendChild(row);
+    row.appendChild(nums); list.appendChild(row);
   });
 
-  list.style.display = "block";
-
-  // Voters list
-  const box = $("voters-box");
-  const names = allVotes.map(v=>v.name).join(", ");
-  box.innerHTML = `<strong style="color:var(--accent)">Deltagere:</strong> ${names}`;
-  box.style.display = "block";
+  list.style.display="block";
+  const box=$("voters-box");
+  box.innerHTML=`<strong style="color:var(--accent)">Deltagere:</strong> ${allVotes.map(v=>v.name).join(", ")}`;
+  box.style.display="block";
+  window._resultsData={totals,allVotes,top5};
 }
 
-// ── Event listeners ───────────────────────────────────
+/* ═══════════════════════ CSV PARSING ═══════════════════════ */
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) throw new Error("Filen er tom eller mangler data-rækker");
 
-// Name input
-$("inp-name").addEventListener("input", e => {
-  $("btn-start").disabled = !e.target.value.trim();
-});
-$("inp-name").addEventListener("keydown", e => { if(e.key==="Enter") $("btn-start").click(); });
-
-// Start voting
-$("btn-start").addEventListener("click", async () => {
-  const name = $("inp-name").value.trim();
-  if (!name) return;
-
-  // Check duplicate
-  const snap = await getDocs(collection(db, VOTES_COL));
-  const existing = snap.docs.map(d=>d.data().name?.toLowerCase());
-  if (existing.includes(name.toLowerCase())) {
-    alert(`${name} har allerede stemt. Vælg et andet navn.`);
-    return;
+  function splitLine(line) {
+    const out=[]; let cur=""; let inQ=false;
+    for (let i=0;i<line.length;i++) {
+      const c=line[i];
+      if (c==='"') { inQ=!inQ; }
+      else if (c==="," && !inQ) { out.push(cur.trim()); cur=""; }
+      else cur+=c;
+    }
+    out.push(cur.trim());
+    return out;
   }
 
-  currentName = name;
-  ratings = {};
-  $("vote-badge").textContent = name+" · Bedømmelse";
-  buildWishCards();
-  updateRatedCount();
-  showScreen("vote");
-  window.scrollTo(0,0);
+  const headers = splitLine(lines[0]).map(h=>h.toLowerCase().replace(/"/g,"").trim());
+  const ti = headers.findIndex(h=>h.includes("title")||h.includes("titel")||h.includes("navn"));
+  const di = headers.findIndex(h=>h.includes("desc")||h.includes("beskriv"));
+  const li = headers.findIndex(h=>h.includes("detail")||h.includes("detalje")||h.includes("note"));
+
+  if (ti===-1) throw new Error(`Ingen 'title' kolonne fundet. Kolonner: ${headers.join(", ")}`);
+
+  const rows=[];
+  for (let i=1;i<lines.length;i++) {
+    const line=lines[i].trim(); if(!line) continue;
+    const cols=splitLine(line).map(c=>c.replace(/^"|"$/g,"").trim());
+    const title=cols[ti]||""; if(!title) continue;
+    rows.push({ id:i, title, desc:di>-1?(cols[di]||""):"", detail:li>-1?(cols[li]||""):"" });
+  }
+  if (!rows.length) throw new Error("Ingen gyldige rækker fundet i CSV-filen");
+  return rows;
+}
+
+function showFeedback(msg, type) {
+  const el=$("csv-feedback");
+  el.innerHTML=`<div class="alert alert-${type}" style="margin-top:12px;"><span>${type==="success"?"✓":type==="danger"?"✕":"ℹ️"}</span><div>${msg}</div></div>`;
+}
+
+function showPreview(rows) {
+  parsedCSV=rows;
+  $("csv-row-count").textContent=rows.length;
+  const tbody=$("csv-preview-body"); tbody.innerHTML="";
+  rows.forEach((r,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td class="col-num">${i+1}</td>
+      <td><strong>${r.title}</strong></td>
+      <td>${r.desc||"<em style='color:var(--dim)'>—</em>"}</td>
+      <td>${r.detail||"<em style='color:var(--dim)'>—</em>"}</td>`;
+    tbody.appendChild(tr);
+  });
+  $("csv-preview-wrap").style.display="block";
+}
+
+function handleFile(file) {
+  if (!file) return;
+  if (!file.name.toLowerCase().endsWith(".csv") && file.type!=="text/csv") {
+    showFeedback("Kun .csv filer er tilladt.", "danger"); return;
+  }
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try {
+      const rows=parseCSV(e.target.result);
+      $("csv-feedback").innerHTML=""; $("upload-success").style.display="none";
+      showPreview(rows);
+      showFeedback(`${rows.length} ønsker fundet. Kontroller forhåndsvisningen og klik "Gem".`, "success");
+    } catch(err) {
+      $("csv-preview-wrap").style.display="none";
+      showFeedback(err.message, "danger");
+    }
+  };
+  reader.readAsText(file,"UTF-8");
+}
+
+/* ═══════════════════════ SAVE WISHES ═══════════════════════ */
+async function uploadWishes() {
+  if (!parsedCSV.length) return;
+  const btn=$("btn-upload-wishes");
+  btn.disabled=true; btn.textContent="Gemmer til Firestore…";
+  try {
+    await setDoc(doc(db, CONFIG_DOC), { wishes:parsedCSV, workshopName, updatedAt:Date.now() }, {merge:true});
+    wishes=parsedCSV;
+    $("upload-success").style.display="block";
+    $("csv-preview-wrap").style.display="none";
+    $("csv-feedback").innerHTML="";
+    parsedCSV=[];
+    $("csv-file-input").value="";
+    renderNameScreen();
+    renderCurrentWishes();
+    $("r-wishes").textContent=wishes.length;
+  } catch(e) { showFeedback("Fejl ved gemning: "+e.message,"danger"); }
+  btn.disabled=false; btn.textContent="✓ Gem ønsker til workshoppen";
+}
+
+function renderCurrentWishes() {
+  const el=$("current-wishes-info");
+  if (!wishes.length) {
+    el.innerHTML=`<em style="color:var(--muted)">Ingen ønsker uploadet endnu.</em>`; return;
+  }
+  el.innerHTML=`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <span style="font-size:26px;font-weight:800;color:var(--accent);font-family:'Syne',sans-serif;">${wishes.length}</span>
+      <span style="font-size:14px;color:var(--muted);">aktive ønsker i denne workshop</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      ${wishes.slice(0,6).map((w,i)=>`
+        <div style="font-size:13px;color:var(--text);display:flex;gap:8px;align-items:baseline;">
+          <span style="font-family:'DM Mono',monospace;color:var(--dim);flex-shrink:0;">${i+1}.</span>
+          <span>${w.title}</span>
+        </div>`).join("")}
+      ${wishes.length>6?`<div style="font-size:12px;color:var(--dim);margin-top:4px;">… og ${wishes.length-6} mere</div>`:""}
+    </div>`;
+}
+
+/* ═══════════════════════ SAMPLE CSV ═══════════════════════ */
+$("btn-download-sample").addEventListener("click", e => {
+  e.preventDefault();
+  const rows = [
+    ["title","description","detail"],
+    ["Automatiske flows & sagslukning","Vi skal løse problemer med de automatiske flows, særligt dem der håndterer sagslukning og tilhørende kundekommunikation.","Dækker: Fejlende automatiske flows og inkonsekvente sagslukkeregler."],
+    ["Team-specifikke visninger","Vi skal sikre at team-specifikke visninger afspejler de korrekte sagslukkeregler og teamprocesser.","Dækker: Udfordringer med forskellige sagslukkeregler for Teknisk Support og Kundeservice."],
+    ["Telefoni direkte i HubSpot","Vi skal implementere telefoni direkte i HubSpot for at samle al kundedata og kommunikation ét sted.","Dækker: Ønske om at integrere telefoni og undgå brug af flere systemer."],
+    ["Korrekt afsendermail","Vi skal sikre at den korrekte afsendermail automatisk vælges baseret på pipeline eller modtager.","Dækker: Problem med ukorrekt forlagsmail."],
+    ["Søge- og oprettelsesfunktioner","Vi skal forbedre søge- og oprettelsesfunktionerne for kontakter og virksomheder.","Dækker: Manglende søgning på institutionsnummer og duplikerede kontakter."],
+  ];
+  const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="eksempel-ønsker.csv"; a.click();
 });
 
-// Submit
+/* ═══════════════════════ EXPORT RESULTS ═══════════════════════ */
+$("btn-export-csv").addEventListener("click", () => {
+  if (!window._resultsData) { alert("Ingen resultater at eksportere."); return; }
+  const {totals,allVotes} = window._resultsData;
+  const rows=[["Rang","Titel","Point","Snit","Stemmer"]];
+  totals.forEach((t,i)=>rows.push([i+1,t.wish.title,t.sum,t.avg,t.count]));
+  rows.push([],["Deltager","Tidspunkt"]);
+  allVotes.forEach(v=>rows.push([v.name,new Date(v.timestamp).toLocaleString("da-DK")]));
+  const csv=rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="workshop-resultater.csv"; a.click();
+});
+
+/* ═══════════════════════ RESET WORKSHOP ═══════════════════════ */
+$("btn-reset-votes").addEventListener("click", ()=>{
+  $("reset-confirm").style.display="block";
+  $("reset-done").style.display="none";
+});
+$("btn-cancel-reset").addEventListener("click", ()=>{
+  $("reset-confirm").style.display="none";
+});
+$("btn-confirm-reset").addEventListener("click", async ()=>{
+  const btn=$("btn-confirm-reset");
+  btn.disabled=true; btn.textContent="Nulstiller…";
+  try {
+    // 1) Slet alle stemmer
+    const snap=await getDocs(collection(db,VOTES_COL));
+    await Promise.all(snap.docs.map(d=>deleteDoc(d.ref)));
+
+    // 2) Ryd ønsker i config/workshop
+    await setDoc(
+      doc(db, CONFIG_DOC),
+      { wishes: [], updatedAt: Date.now() },
+      { merge: true }
+    );
+
+    // 3) Opdater lokal state og UI
+    wishes = [];
+    renderNameScreen();
+    renderCurrentWishes();
+    $("r-wishes").textContent = "0";
+
+    // 4) Nulstil resultater
+    if(unsubscribe){unsubscribe();unsubscribe=null;}
+    loadResults();
+
+    $("reset-confirm").style.display="none";
+    $("reset-done").style.display="block";
+  } catch(e){
+    alert("Fejl: "+e.message);
+  }
+  btn.disabled=false; btn.textContent="Ja, nulstil nu";
+});
+
+/* ═══════════════════════ SAVE NAME ═══════════════════════ */
+$("btn-save-name").addEventListener("click", async ()=>{
+  const name=$("inp-workshop-name").value.trim(); if(!name) return;
+  await setDoc(doc(db,CONFIG_DOC),{workshopName:name},{merge:true});
+  workshopName=name; applyName();
+  $("name-saved").style.display="block";
+  setTimeout(()=>$("name-saved").style.display="none",3000);
+});
+
+/* ═══════════════════════ EVENT LISTENERS ═══════════════════════ */
+$("inp-name").addEventListener("input", e=>{ $("btn-start").disabled=!e.target.value.trim(); });
+$("inp-name").addEventListener("keydown", e=>{ if(e.key==="Enter") $("btn-start").click(); });
+
+$("btn-start").addEventListener("click", async ()=>{
+  const name=$("inp-name").value.trim(); if(!name) return;
+  const snap=await getDocs(collection(db,VOTES_COL));
+  if(snap.docs.map(d=>d.data().name?.toLowerCase()).includes(name.toLowerCase())){
+    alert(`${name} har allerede stemt. Vælg et andet navn.`); return;
+  }
+  currentName=name; ratings={};
+  $("vote-badge").textContent=name+" · Bedømmelse";
+  buildWishCards(); updateRatedCount();
+  showScreen("vote"); window.scrollTo(0,0);
+});
+
 $("btn-submit").addEventListener("click", submitVote);
+$("btn-new-voter").addEventListener("click", ()=>{ $("inp-name").value=""; $("btn-start").disabled=true; showScreen("name"); });
 
-// New voter
-$("btn-new-voter").addEventListener("click", () => {
-  $("inp-name").value = "";
-  $("btn-start").disabled = true;
-  showScreen("name");
-});
-
-// Admin
-$("inp-admin").addEventListener("keydown", e => { if(e.key==="Enter") $("btn-admin").click(); });
-$("btn-admin").addEventListener("click", () => {
-  if ($("inp-admin").value === ADMIN_PASSWORD) {
-    $("admin-err").style.display = "none";
-    $("inp-admin").value = "";
-    showScreen("results");
+$("inp-admin").addEventListener("keydown", e=>{ if(e.key==="Enter") $("btn-admin").click(); });
+$("btn-admin").addEventListener("click", ()=>{
+  if($("inp-admin").value===ADMIN_PASS){
+    $("admin-err").style.display="none"; $("inp-admin").value="";
+    $("inp-workshop-name").value=workshopName;
+    renderCurrentWishes();
+    showScreen("admin");
     loadResults();
   } else {
-    $("admin-err").style.display = "block";
-    $("inp-admin").value = "";
+    $("admin-err").style.display="block"; $("inp-admin").value="";
   }
 });
 
-// Back from results
-$("btn-back-results").addEventListener("click", () => {
-  if (unsubscribe) { unsubscribe(); unsubscribe=null; }
-  showScreen("name");
-});
-
-// Refresh results
+$("btn-back-admin").addEventListener("click", ()=>showScreen("name"));
 $("btn-refresh").addEventListener("click", loadResults);
 
+/* CSV drop zone */
+const dz=$("drop-zone");
+dz.addEventListener("dragover", e=>{ e.preventDefault(); dz.classList.add("drag-over"); });
+dz.addEventListener("dragleave", ()=>dz.classList.remove("drag-over"));
+dz.addEventListener("drop", e=>{ e.preventDefault(); dz.classList.remove("drag-over"); handleFile(e.dataTransfer.files[0]); });
+$("csv-file-input").addEventListener("change", e=>handleFile(e.target.files[0]));
+$("btn-clear-csv").addEventListener("click", ()=>{
+  parsedCSV=[]; $("csv-preview-wrap").style.display="none";
+  $("csv-feedback").innerHTML=""; $("csv-file-input").value="";
+});
+$("btn-upload-wishes").addEventListener("click", uploadWishes);
+
+/* Boot */
+boot();
 </script>
 </body>
 </html>
